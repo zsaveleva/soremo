@@ -1,0 +1,66 @@
+.meter {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.scale {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.segment {
+  display: grid;
+  gap: 6px;
+}
+
+.bar {
+  height: 8px;
+  background: var(--line);
+}
+
+.segment:first-child .bar {
+  border-radius: 2px 0 0 2px;
+}
+
+.segment:last-child .bar {
+  border-radius: 0 2px 2px 0;
+}
+
+/* Заполненные сегменты окрашиваются цветом достигнутого уровня. */
+.scale:has([data-level='low'][data-filled]):not(:has([data-level='mid'][data-filled])) [data-filled] .bar {
+  background: var(--brick);
+}
+
+.scale:has([data-level='mid'][data-filled]):not(:has([data-level='high'][data-filled])) [data-filled] .bar {
+  background: var(--sand);
+}
+
+.scale:has([data-level='high'][data-filled]) [data-filled] .bar {
+  background: var(--moss);
+}
+
+.label {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.label[data-current] {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hint {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+.meter[data-compact] .label:not([data-current]) {
+  visibility: hidden;
+}
+
+.meter[data-compact] .bar {
+  height: 6px;
+}

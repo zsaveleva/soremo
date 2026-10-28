@@ -1,0 +1,106 @@
+.group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: var(--s-2);
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.grid {
+  display: grid;
+  gap: var(--s-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid[data-columns='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid[data-columns='5'] {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 560px) {
+  .grid[data-columns='3'],
+  .grid[data-columns='5'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 64px;
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: border-color 120ms var(--ease);
+}
+
+.tile:hover {
+  border-color: var(--ink-2);
+}
+
+/* Выбранная плитка: обводка в два пикселя чернилами и полоса слева. */
+.tile[data-checked] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.tile[data-checked]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: var(--ink);
+  border-radius: 0 2px 2px 0;
+}
+
+.tile:has(.input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.title {
+  font-size: var(--fs-15);
+  font-weight: 600;
+}
+
+.caption {
+  color: var(--ink-2);
+  font-size: var(--fs-13);
+  line-height: 1.35;
+}
+
+.error {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 6px;
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.error svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--brick);
+}

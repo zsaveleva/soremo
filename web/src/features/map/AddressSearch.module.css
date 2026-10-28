@@ -1,0 +1,103 @@
+.root {
+  position: relative;
+}
+
+.field {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-2);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: var(--control-h);
+  padding: 0 var(--s-3) 0 38px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  appearance: none;
+}
+
+.input::placeholder {
+  color: #8a877f;
+}
+
+.input:hover {
+  border-color: var(--ink-2);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: var(--s-1) 0;
+}
+
+.list:empty {
+  display: none;
+}
+
+.option {
+  display: grid;
+  gap: 1px;
+  padding: var(--s-2) var(--s-3);
+  cursor: pointer;
+}
+
+.option[aria-selected='true'] {
+  background: var(--ink-hover);
+  box-shadow: inset 2px 0 0 var(--ink);
+}
+
+.addr {
+  font-weight: 500;
+}
+
+.meta {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.empty {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-3);
+  font-size: 14px;
+}
+
+.empty p {
+  color: var(--ink-2);
+}
+
+.empty a {
+  font-weight: 500;
+}

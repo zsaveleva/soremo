@@ -1,0 +1,11 @@
+.cache/
+node_modules/
+web/dist/
+.env
+.DS_Store
+*.log
+web/test-results/
+web/playwright-report/
+
+# Генерируется scripts/build-static-data.mjs
+web/public/data/

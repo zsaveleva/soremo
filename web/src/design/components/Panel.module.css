@@ -1,0 +1,110 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: var(--panel-width);
+  max-height: 100%;
+  background: var(--surface);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-float);
+  overflow: hidden;
+  animation: panel-in var(--t-reveal) var(--ease);
+}
+
+@keyframes panel-in {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-4) 0 var(--s-6);
+}
+
+.title {
+  min-width: 0;
+  padding-top: var(--s-2);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--s-4) var(--s-6) var(--s-6);
+  overscroll-behavior: contain;
+}
+
+.footer {
+  padding: var(--s-4) var(--s-6);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  height: 46vh;
+  background: var(--surface);
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+  box-shadow: 0 -8px 24px rgba(20, 20, 20, 0.12);
+  transition: height var(--t-reveal) var(--ease);
+  animation: sheet-in var(--t-reveal) var(--ease);
+}
+
+.sheet[data-expanded] {
+  height: calc(100dvh - 56px);
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+.sheet .head {
+  padding: 0 var(--s-2) 0 var(--s-4);
+}
+
+.sheet .body {
+  padding: var(--s-3) var(--s-4) var(--s-6);
+}
+
+.sheet .footer {
+  padding: var(--s-3) var(--s-4) calc(var(--s-3) + env(safe-area-inset-bottom));
+}
+
+.handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  height: 28px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--ink-2);
+}
+
+.grip {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+
+.chev {
+  transition: transform var(--t-reveal) var(--ease);
+}
+
+.sheet[data-expanded] .chev {
+  transform: rotate(180deg);
+}

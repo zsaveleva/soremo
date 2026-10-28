@@ -1,0 +1,97 @@
+.page {
+  max-width: var(--doc-width);
+  margin: 0 auto;
+  padding: var(--s-8) var(--s-4) var(--s-16);
+}
+
+.back {
+  margin: 0 0 var(--s-6) calc(-1 * var(--s-3));
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.addr {
+  margin-top: var(--s-2);
+  color: var(--ink-2);
+  font-size: var(--fs-17);
+}
+
+.meter {
+  max-width: 520px;
+  margin-top: var(--s-8);
+}
+
+.section {
+  margin-top: var(--s-12);
+  display: grid;
+  gap: var(--s-4);
+}
+
+.h2 {
+  font-size: var(--fs-20);
+  font-weight: 600;
+}
+
+.meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-4);
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px 180px;
+  gap: var(--s-4);
+  align-items: end;
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.fname {
+  align-self: center;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.note {
+  flex: 1 1 300px;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.fileCell {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  overflow-wrap: anywhere;
+}
+
+.sub {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+@media (max-width: 720px) {
+  .metaRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .title {
+    font-size: var(--fs-26);
+  }
+}

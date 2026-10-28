@@ -1,0 +1,313 @@
+.report {
+  display: grid;
+}
+
+.head {
+  display: grid;
+  gap: var(--s-3);
+  padding-bottom: var(--s-8);
+  margin-bottom: var(--s-4);
+  border-bottom: 1px solid var(--ink);
+}
+
+.kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.sub {
+  color: var(--ink-2);
+  font-size: var(--fs-17);
+}
+
+.headRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-6);
+  margin-top: var(--s-3);
+}
+
+.meter {
+  flex: 1 1 380px;
+  max-width: 520px;
+}
+
+.summary {
+  font-size: var(--fs-17);
+  line-height: 1.55;
+  max-width: 720px;
+}
+
+.keyNums {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-6);
+  margin-top: var(--s-8);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.keyNums dt {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.keyNums dd {
+  margin-top: var(--s-1);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-26);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.keyNote {
+  margin-top: var(--s-3);
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.warnings {
+  list-style: none;
+  margin: var(--s-6) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-2);
+  font-size: 14px;
+  max-width: 720px;
+}
+
+.warnings li {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: var(--s-2);
+}
+
+.warnings svg {
+  margin-top: 3px;
+  color: var(--ink-2);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s-8);
+}
+
+.facts {
+  display: grid;
+  align-content: start;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-4);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.fact dt {
+  color: var(--ink-2);
+}
+
+.fact dd {
+  text-align: right;
+}
+
+.more {
+  margin-top: var(--s-4);
+  font-size: 14px;
+}
+
+.scenario {
+  padding: var(--s-8) 0;
+  border-top: 1px solid var(--ink);
+  scroll-margin-top: var(--s-4);
+}
+
+.scenario:last-child {
+  padding-bottom: 0;
+}
+
+.scHead {
+  display: grid;
+  gap: var(--s-1);
+}
+
+.scTitle {
+  font-size: var(--fs-20);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.scMeta {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.scText {
+  margin-top: var(--s-3);
+  max-width: 720px;
+}
+
+.h4 {
+  margin: var(--s-8) 0 var(--s-3);
+  font-size: var(--fs-15);
+  font-weight: 600;
+}
+
+.econ {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s-4);
+}
+
+.econ dt {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.econ dd {
+  margin-top: 2px;
+  font-size: var(--fs-17);
+  font-weight: 600;
+}
+
+.assume {
+  margin-top: var(--s-3);
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+  max-width: 720px;
+}
+
+.risks {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: var(--s-2);
+  max-width: 720px;
+}
+
+.cmpTitle {
+  font-weight: 500;
+}
+
+.improve {
+  display: grid;
+  gap: var(--s-4);
+  max-width: 720px;
+}
+
+.levels {
+  border-collapse: collapse;
+  font-size: 14px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.levels th,
+.levels td {
+  text-align: left;
+  padding: var(--s-2) var(--s-3) var(--s-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.levels thead th {
+  font-size: var(--fs-13);
+  font-weight: 500;
+  color: var(--ink-2);
+  border-bottom-color: var(--ink);
+}
+
+.levels tbody th {
+  font-weight: 400;
+  color: var(--ink-2);
+}
+
+.levels td:last-child {
+  font-weight: 600;
+}
+
+.improveActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.method {
+  max-width: 720px;
+}
+
+.engine {
+  margin-top: var(--s-3);
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+@media (max-width: 720px) {
+  .title {
+    font-size: var(--fs-26);
+  }
+
+  .keyNums {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-4);
+  }
+
+  .keyNums dd {
+    font-size: var(--fs-20);
+  }
+
+  .twoCol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .econ {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Печать и PDF: тот же документ без навигации, разрывы перед сценариями. */
+@media print {
+  /* Каждый сценарий со второго — с новой страницы; первый идёт сразу за заголовком раздела. */
+  .scenario + .scenario {
+    break-before: page;
+  }
+
+  .scenario {
+    padding-top: var(--s-6);
+  }
+
+  .h4 {
+    break-after: avoid;
+  }
+
+  .risks,
+  .assume {
+    break-inside: avoid;
+  }
+
+  .head,
+  .keyNums,
+  .econ,
+  table {
+    break-inside: avoid;
+  }
+}

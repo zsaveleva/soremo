@@ -1,0 +1,10 @@
+.skeleton {
+  display: block;
+  background: #e6e2da;
+  border-radius: 2px;
+}
+
+.text {
+  display: grid;
+  gap: 10px;
+}

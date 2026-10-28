@@ -1,0 +1,135 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
+  min-height: calc(100% - 56px);
+}
+
+.formCol {
+  padding: var(--s-8) var(--s-8) var(--s-16);
+}
+
+.mapCol {
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  border-left: 1px solid var(--line);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.lead {
+  margin-top: var(--s-3);
+  color: var(--ink-2);
+}
+
+.form {
+  display: grid;
+  gap: var(--s-6);
+  margin-top: var(--s-8);
+}
+
+.row3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+
+.geo {
+  list-style: none;
+  margin: calc(-1 * var(--s-4)) 0 0;
+  padding: var(--s-1) 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+}
+
+.geo button {
+  width: 100%;
+  padding: var(--s-2) var(--s-3);
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.geo button:hover {
+  background: var(--ink-hover);
+}
+
+.geoNote,
+.point {
+  margin-top: calc(-1 * var(--s-3));
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.point[data-error] {
+  color: var(--ink);
+  font-weight: 500;
+  padding-left: var(--s-2);
+  border-left: 3px solid var(--brick);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.alt {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+  flex: 1 1 220px;
+}
+
+.formError {
+  padding: var(--s-3) var(--s-4);
+  border-left: 3px solid var(--brick);
+  background: var(--surface);
+  font-size: 14px;
+}
+
+.done {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-4);
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--s-16) var(--s-4);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mapCol {
+    position: relative;
+    top: 0;
+    height: 60vh;
+    order: -1;
+    border-left: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .formCol {
+    padding: var(--s-6) var(--s-4) var(--s-12);
+  }
+
+  .title {
+    font-size: var(--fs-26);
+  }
+}
+
+@media (max-width: 480px) {
+  .row3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}

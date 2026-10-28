@@ -1,0 +1,82 @@
+.control {
+  width: 100%;
+  height: var(--control-h);
+  padding: 0 var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  font-size: var(--fs-15);
+  transition: border-color 120ms var(--ease), box-shadow 120ms var(--ease);
+  appearance: none;
+}
+
+.control::placeholder {
+  color: #8a877f;
+}
+
+.control:hover {
+  border-color: var(--ink-2);
+}
+
+.control:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--ink);
+  box-shadow: inset 3px 0 0 var(--brick);
+}
+
+.control:disabled {
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink-2);
+  cursor: not-allowed;
+}
+
+.textarea {
+  height: auto;
+  min-height: 96px;
+  padding: 10px var(--s-3);
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.affix {
+  position: relative;
+}
+
+.withSuffix {
+  padding-right: 44px;
+}
+
+.suffix {
+  position: absolute;
+  top: 0;
+  right: var(--s-3);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--ink-2);
+  pointer-events: none;
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.select {
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--s-3);
+  transform: translateY(-50%);
+  color: var(--ink-2);
+  pointer-events: none;
+}

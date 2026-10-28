@@ -1,0 +1,108 @@
+.root {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--s-16) var(--s-4);
+}
+
+.addr {
+  color: var(--ink-2);
+}
+
+.title {
+  margin-top: var(--s-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.steps {
+  list-style: none;
+  margin: var(--s-12) 0 var(--s-8);
+  padding: 0;
+  display: grid;
+  gap: var(--s-6);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: var(--s-4);
+  align-items: start;
+  animation: step-in 420ms var(--ease) both;
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.mark {
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+}
+
+/* Контур футпринта прорисовывается, пока шаг идёт, и заливается кирпичом, когда завершён. */
+.markPath {
+  fill: transparent;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-dasharray: 64;
+  stroke-dashoffset: 64;
+  animation: draw 1400ms var(--ease) forwards;
+  transition: fill 240ms var(--ease);
+}
+
+.step[data-done] .markPath {
+  fill: var(--brick);
+  fill-opacity: 0.85;
+  stroke-dashoffset: 0;
+  animation: none;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.text {
+  display: grid;
+  gap: 2px;
+}
+
+.stepTitle {
+  font-size: var(--fs-17);
+  font-weight: 600;
+}
+
+.detail {
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.note {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+@media (max-width: 560px) {
+  .root {
+    padding-top: var(--s-8);
+  }
+
+  .title {
+    font-size: var(--fs-26);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markPath {
+    stroke-dashoffset: 0;
+  }
+}

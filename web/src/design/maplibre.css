@@ -1,0 +1,32 @@
+/* Элементы управления MapLibre в палитре продукта. */
+.maplibregl-ctrl-group {
+  border-radius: var(--radius-control) !important;
+  box-shadow: var(--shadow-float) !important;
+  background: var(--surface) !important;
+}
+
+.maplibregl-ctrl-group button {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.maplibregl-ctrl-group button:focus-visible {
+  outline: 2px solid var(--ink) !important;
+  outline-offset: -2px;
+  box-shadow: none !important;
+}
+
+.maplibregl-ctrl-attrib {
+  font-family: var(--font-text);
+  font-size: 11px;
+  background: rgba(239, 236, 230, 0.85) !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--ink-2) !important;
+}
+
+.maplibregl-canvas:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}

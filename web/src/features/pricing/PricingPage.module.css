@@ -1,0 +1,113 @@
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--s-12) var(--s-6) var(--s-16);
+}
+
+.head {
+  display: grid;
+  gap: var(--s-3);
+  max-width: 680px;
+  margin-bottom: var(--s-12);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.lead {
+  color: var(--ink-2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--s-12);
+  align-items: start;
+}
+
+.config {
+  display: grid;
+  gap: var(--s-8);
+}
+
+.note {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+  max-width: 560px;
+}
+
+.summary {
+  position: sticky;
+  top: 80px;
+  display: grid;
+  gap: var(--s-4);
+  padding: var(--s-6);
+  background: var(--surface);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--line);
+}
+
+.sumLabel {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.price {
+  margin-top: calc(-1 * var(--s-3));
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-34);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.facts {
+  display: grid;
+  font-size: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--s-3);
+  padding: var(--s-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--ink-2);
+}
+
+.free {
+  font-size: var(--fs-13);
+}
+
+.current {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: var(--s-8) var(--s-4) var(--s-12);
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+
+  .summary {
+    position: static;
+  }
+
+  .title {
+    font-size: var(--fs-26);
+  }
+}

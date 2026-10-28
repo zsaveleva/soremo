@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "soremo-api",
+      "credentials": [{ "accessKey": "soremo", "secretKey": "soremo-secret" }],
+      "actions": ["Admin", "Read", "List", "Tagging", "Write"]
+    }
+  ]
+}

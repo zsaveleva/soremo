@@ -1,0 +1,180 @@
+@import './fonts.css';
+
+:root {
+  /* Палитра (ТЗ 6.2). */
+  --paper: #efece6;
+  --surface: #ffffff;
+  --ink: #141414;
+  --ink-2: #5c5a55;
+  --line: #d8d4cc;
+  --brick: #b8402b;
+  --brick-soft: #f3ded8;
+  --moss: #3e6b4f;
+  --sand: #c9a24d;
+
+  /* Производные: только оттенки палитры для состояний. */
+  --brick-press: #9e3523;
+  --line-strong: #b9b4aa;
+  --ink-hover: rgba(20, 20, 20, 0.05);
+  --ink-press: rgba(20, 20, 20, 0.09);
+  --moss-soft: #e1e9e3;
+  --sand-soft: #f3ead6;
+
+  --font-display: 'Unbounded', system-ui, sans-serif;
+  --font-text: 'Golos Text', system-ui, sans-serif;
+
+  /* Шкала 13 / 15 / 17 / 20 / 26 / 34 / 48. */
+  --fs-13: 13px;
+  --fs-15: 15px;
+  --fs-17: 17px;
+  --fs-20: 20px;
+  --fs-26: 26px;
+  --fs-34: 34px;
+  --fs-48: 48px;
+
+  /* Отступы, шаг 4 px. */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-12: 48px;
+  --s-16: 64px;
+
+  --radius-control: 4px;
+  --radius-panel: 8px;
+  --shadow-float: 0 8px 24px rgba(20, 20, 20, 0.12);
+
+  --control-h: 40px;
+  --control-h-sm: 32px;
+  --doc-width: 880px;
+  --doc-nav: 220px;
+  --panel-width: 440px;
+
+  --t-reveal: 180ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--fs-15);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea,
+output {
+  font: inherit;
+  color: inherit;
+}
+
+/* Моноширинный шрифт в продукте не используется (ТЗ 6.3). */
+code,
+kbd,
+samp,
+pre {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Один стиль фокуса на весь продукт; браузерный заменяется полностью. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--brick-soft);
+}
+
+.display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* PDF и печать: белый лист (фон бумаги не доходит до полей страницы), документ — по ширине полосы набора. */
+@media print {
+  html,
+  body {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+html[data-print='1'],
+html[data-print='1'] body {
+  background: #fff;
+}

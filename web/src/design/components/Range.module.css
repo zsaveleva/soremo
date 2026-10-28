@@ -1,0 +1,108 @@
+.range {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.label {
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.value {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.track {
+  position: relative;
+  height: 24px;
+}
+
+.track::before,
+.track::after {
+  content: '';
+  position: absolute;
+  top: 11px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.track::before {
+  left: 0;
+  right: 0;
+  background: var(--line);
+}
+
+.track::after {
+  left: var(--lo);
+  right: calc(100% - var(--hi));
+  background: var(--ink);
+}
+
+.track input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  appearance: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.track input::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.track input::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.track input::-moz-range-track {
+  background: none;
+}
+
+.track input:focus-visible {
+  outline: none;
+}
+
+.track input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink);
+}
+
+.track input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink);
+}
+
+.ticks {
+  position: relative;
+  height: 16px;
+  margin: 0 9px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+}

@@ -1,0 +1,38 @@
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  font-size: var(--fs-13);
+  font-weight: 500;
+}
+
+.optional {
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+.hint {
+  color: var(--ink-2);
+  font-size: var(--fs-13);
+}
+
+.error {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: var(--fs-13);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.error svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--brick);
+}

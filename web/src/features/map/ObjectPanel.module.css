@@ -1,0 +1,137 @@
+.titleBlock {
+  display: grid;
+  gap: var(--s-1);
+}
+
+.address {
+  font-family: var(--font-display);
+  font-size: var(--fs-26);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.name {
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.subtitle {
+  color: var(--ink-2);
+}
+
+.card {
+  display: grid;
+  gap: var(--s-8);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: calc(-1 * var(--s-4));
+}
+
+.h3 {
+  font-size: var(--fs-15);
+  font-weight: 600;
+  margin-bottom: var(--s-2);
+}
+
+.facts {
+  display: grid;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-4);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.fact dt {
+  color: var(--ink-2);
+}
+
+.fact dd {
+  text-align: right;
+  max-width: 220px;
+}
+
+.context {
+  display: grid;
+}
+
+.ctx {
+  display: grid;
+  gap: 2px;
+  padding: var(--s-2) 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.ctx dt {
+  color: var(--ink-2);
+}
+
+.ctx dd {
+  display: grid;
+  gap: 2px;
+}
+
+.ctxValue {
+  font-weight: 600;
+  font-size: var(--fs-15);
+}
+
+.ctxCaption {
+  color: var(--ink-2);
+  font-size: var(--fs-13);
+  line-height: 1.4;
+}
+
+.docs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}
+
+.gate {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.gateText {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.quota {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.actions {
+  display: flex;
+  gap: var(--s-2);
+}
+
+.grow {
+  flex: 1;
+}
+
+.skelBlock {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.error {
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+}

@@ -1,0 +1,192 @@
+.page {
+  max-width: var(--doc-width);
+  margin: 0 auto;
+  padding: var(--s-12) var(--s-4) var(--s-16);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-34);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.who {
+  margin-top: var(--s-2);
+  color: var(--ink-2);
+}
+
+.welcome {
+  margin-bottom: var(--s-6);
+  font-weight: 500;
+}
+
+.notes {
+  margin-bottom: var(--s-6);
+  border-top: 1px solid var(--ink);
+}
+
+.notes ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notes li {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--s-3);
+  padding: var(--s-3) 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.notes li[data-unread] {
+  font-weight: 500;
+}
+
+.noteDate {
+  color: var(--ink-2);
+}
+
+.hint {
+  margin-bottom: var(--s-8);
+  max-width: 640px;
+  color: var(--ink-2);
+}
+
+.access {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.accessNums {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-6);
+}
+
+.accessNums dt {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.accessNums dd {
+  margin-top: var(--s-1);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-20);
+  letter-spacing: -0.02em;
+}
+
+.usage {
+  height: 6px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.usage span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.muted {
+  color: var(--ink-2);
+  font-size: 14px;
+  max-width: 640px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+
+.stack {
+  display: grid;
+  gap: var(--s-8);
+}
+
+.h2 {
+  font-size: var(--fs-17);
+  font-weight: 600;
+  margin-bottom: var(--s-3);
+}
+
+.rowLink {
+  display: grid;
+  gap: 2px;
+  text-decoration: none;
+}
+
+.addr {
+  font-weight: 500;
+}
+
+.sub {
+  display: block;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.fileCell {
+  display: grid;
+  gap: 2px;
+  overflow-wrap: anywhere;
+}
+
+.statusCell {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+}
+
+.linkBtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--fs-13);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-4);
+  max-width: 520px;
+  padding: var(--s-4) 0;
+}
+
+.empty p {
+  color: var(--ink-2);
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding-top: var(--s-8);
+  }
+
+  .title {
+    font-size: var(--fs-26);
+  }
+
+  .accessNums {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-3);
+  }
+}

@@ -1,0 +1,139 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  height: var(--control-h);
+  padding: 0 var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--fs-15);
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 120ms var(--ease), border-color 120ms var(--ease), color 120ms var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button:hover {
+  text-decoration: none;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.sm {
+  height: var(--control-h-sm);
+  padding: 0 var(--s-3);
+  font-size: var(--fs-13);
+  gap: 6px;
+}
+
+.lg {
+  height: 48px;
+  padding: 0 var(--s-6);
+  font-size: var(--fs-17);
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+.iconOnly {
+  width: var(--control-h);
+  padding: 0;
+}
+
+.iconOnly.sm {
+  width: var(--control-h-sm);
+}
+
+/* primary — единственное место, где кнопка красная. */
+.primary {
+  background: var(--brick);
+  color: #fff;
+}
+
+.primary:hover {
+  background: var(--brick-press);
+}
+
+.primary:active {
+  background: #8a2e1e;
+}
+
+.primary:disabled {
+  background: var(--line);
+  color: var(--ink-2);
+}
+
+.secondary {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.secondary:hover {
+  border-color: var(--ink);
+}
+
+.secondary:active {
+  background: var(--paper);
+}
+
+.secondary:disabled {
+  border-color: var(--line);
+  color: var(--ink-2);
+  background: var(--surface);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.ghost:hover {
+  background: var(--ink-hover);
+}
+
+.ghost:active {
+  background: var(--ink-press);
+}
+
+.ghost:disabled {
+  color: var(--ink-2);
+  background: transparent;
+}
+
+/* danger — необратимые действия админа (отклонить, удалить):
+   тёмная заливка отличает их от primary, не вводя новый цвет. */
+.danger {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.danger:hover {
+  background: #2e2d2a;
+}
+
+.danger:active {
+  background: #000;
+}
+
+.danger:disabled {
+  background: var(--line);
+  color: var(--ink-2);
+}
+
+.button[aria-busy='true'] {
+  cursor: progress;
+}
+
+.primary[aria-busy='true'] {
+  background: var(--brick-press);
+  color: #fff;
+}

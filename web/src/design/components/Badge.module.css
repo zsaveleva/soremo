@@ -1,0 +1,46 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 var(--s-2);
+  border-radius: var(--radius-control);
+  font-size: var(--fs-13);
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.mark {
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background: var(--ink-2);
+}
+
+.badge[data-tone='pending'] {
+  background: var(--sand-soft);
+}
+
+.badge[data-tone='pending'] .mark {
+  background: var(--sand);
+}
+
+.badge[data-tone='accepted'] {
+  background: var(--moss-soft);
+}
+
+.badge[data-tone='accepted'] .mark {
+  background: var(--moss);
+}
+
+.badge[data-tone='rejected'] .mark {
+  background: transparent;
+  border: 1.5px solid var(--ink);
+}
+
+.badge[data-tone='draft'] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}

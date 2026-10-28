@@ -1,0 +1,33 @@
+.print {
+  background: #fff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0 0 var(--s-6);
+}
+
+.word {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.kind {
+  margin-left: auto;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+@page {
+  size: A4;
+  margin: 14mm 16mm 16mm;
+}
+
+@media print {
+  .brand {
+    padding-top: 0;
+  }
+}

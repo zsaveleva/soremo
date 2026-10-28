@@ -1,0 +1,12 @@
+.text {
+  display: grid;
+  gap: var(--s-3);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.static {
+  padding-left: var(--s-3);
+  border-left: 3px solid var(--ink);
+  font-weight: 500;
+}

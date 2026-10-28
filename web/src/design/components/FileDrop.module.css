@@ -1,0 +1,130 @@
+.root {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.zone {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-1);
+  padding: var(--s-6);
+  border: 1px dashed var(--ink-2);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  transition: background-color 120ms var(--ease), border-color 120ms var(--ease);
+}
+
+.zone svg {
+  color: var(--ink-2);
+  margin-bottom: var(--s-1);
+}
+
+.zone[data-over] {
+  border-color: var(--ink);
+  border-style: solid;
+  background: var(--paper);
+}
+
+.zone[data-disabled] {
+  opacity: 0.6;
+}
+
+.lead {
+  font-weight: 500;
+}
+
+.pick {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.hint {
+  color: var(--ink-2);
+  font-size: var(--fs-13);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: var(--s-3);
+  padding: var(--s-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.item > svg {
+  margin-top: 2px;
+  color: var(--ink-2);
+}
+
+.meta {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.sub {
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.item[data-error] .sub {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.item[data-error] > svg {
+  color: var(--brick);
+}
+
+.progress {
+  display: block;
+  height: 2px;
+  margin-top: 4px;
+  background: var(--line);
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  transition: width 120ms linear;
+}
+
+.remove {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: -4px -6px 0 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.remove:hover {
+  background: var(--ink-hover);
+  color: var(--ink);
+}
