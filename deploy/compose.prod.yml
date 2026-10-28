@@ -1,0 +1,103 @@
+# Продакшен: тот же стек, что локально, за Caddy с HTTPS.
+# Наружу открыты только 80 и 443; секреты — в deploy/.env (создаёт server-up.sh).
+name: soremo
+
+services:
+  caddy:
+    image: caddy:2.8.4-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [web]
+
+  db:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: soremo
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: soremo
+    volumes: [dbdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soremo"]
+      interval: 3s
+      retries: 30
+
+  s3:
+    image: chrislusf/seaweedfs:3.80
+    restart: unless-stopped
+    command: server -s3 -s3.config=/etc/seaweedfs/s3.json -dir=/data -volume.max=64 -master.volumeSizeLimitMB=64 -master.volumePreallocate=false
+    volumes:
+      - s3data:/data
+      - ./s3.json:/etc/seaweedfs/s3.json:ro
+
+  chrome:
+    image: chromedp/headless-shell:156.0.8078.48
+    restart: unless-stopped
+    shm_size: 512m
+
+  api:
+    build: ../api
+    restart: unless-stopped
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: postgres://soremo:${DB_PASSWORD}@db:5432/soremo?sslmode=disable
+      HTTP_ADDR: ":8080"
+      APP_URL: https://${SITE_ADDRESS}
+      CORS_ORIGIN: https://${SITE_ADDRESS}
+      JWT_SECRET: ${JWT_SECRET}
+      SEED_DIR: /seed
+      S3_ENDPOINT: http://s3:8333
+      S3_BUCKET: soremo
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
+      CHROME_URL: http://chrome:9222
+      PRINT_BASE_URL: http://web
+      SMTP_ADDR: ${SMTP_ADDR:-}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      MAIL_FROM: ${MAIL_FROM:-SOREMO CITY <no-reply@soremo.city>}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+      SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-}
+    volumes: ["../seed:/seed:ro"]
+    depends_on:
+      db: { condition: service_healthy }
+      s3: { condition: service_started }
+      chrome: { condition: service_started }
+
+  web:
+    build: ../web
+    restart: unless-stopped
+    depends_on: [api]
+
+  # Ежедневный дамп базы в volume backups, хранятся 14 последних.
+  backup:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      PGPASSWORD: ${DB_PASSWORD}
+    volumes: [backups:/backups]
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while true; do
+          sleep 60
+          pg_dump -h db -U soremo -Fc soremo > /backups/soremo-$$(date +%F).dump.tmp && mv /backups/soremo-$$(date +%F).dump.tmp /backups/soremo-$$(date +%F).dump
+          ls -1t /backups/*.dump | tail -n +15 | xargs -r rm --
+          sleep 86340
+        done
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  dbdata:
+  s3data:
+  backups:
+  caddy_data:
+  caddy_config:

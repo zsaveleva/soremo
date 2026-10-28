@@ -21,8 +21,8 @@ export function CheckEmailPage() {
       </p>
       {st?.devUrl && (
         <div className={s.devBox}>
-          <span className={s.devLabel}>Режим разработки</span>
-          <span>Письма не отправляются, ссылка записана в лог API. Её же можно открыть здесь:</span>
+          <span className={s.devLabel}>Письма пока не отправляются</span>
+          <span>Почта на сервере не подключена, поэтому ссылка подтверждения показана здесь:</span>
           <a href={st.devUrl.replace(/^https?:\/\/[^/]+/, '') + (st.next ? `&next=${encodeURIComponent(st.next)}` : '')}>
             {st.devUrl}
           </a>

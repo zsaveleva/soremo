@@ -49,6 +49,9 @@ func main() {
 	q := store.New(pool)
 	bsvc := buildings.NewService(q)
 	var mailer mail.Mailer = mail.LogMailer{Log: logger}
+	if cfg.SMTPAddr == "" && !cfg.IsDev() {
+		logger.Warn().Msg("SMTP_ADDR is empty: verification links are shown on the page instead of being emailed")
+	}
 	if cfg.SMTPAddr != "" {
 		mailer = mail.SMTPMailer{Addr: cfg.SMTPAddr, User: cfg.SMTPUser, Password: cfg.SMTPPass, From: cfg.MailFrom}
 	}
@@ -85,6 +88,7 @@ func main() {
 			Geocoder:    buildings.NewGeocoder(),
 			Access:      access.NewService(pool),
 			Dev:         cfg.IsDev(),
+			ShowLinks:   cfg.IsDev() || cfg.SMTPAddr == "",
 			CORSOrigins: cfg.CORSOrigins,
 		}),
 		ReadHeaderTimeout: 10 * time.Second,

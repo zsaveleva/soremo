@@ -1,0 +1,13 @@
+# Сертификат Let's Encrypt выпускается автоматически для SITE_ADDRESS
+# (свой домен или <ip>.sslip.io, если домена нет).
+{$SITE_ADDRESS} {
+	encode zstd gzip
+	reverse_proxy web:80
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+}

@@ -9,3 +9,7 @@ web/playwright-report/
 
 # Генерируется scripts/build-static-data.mjs
 web/public/data/
+
+# Секреты сервера
+deploy/.env
+deploy/s3.json

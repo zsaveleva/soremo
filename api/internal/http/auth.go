@@ -17,6 +17,9 @@ type authHandler struct {
 	access *access.Service
 	q      *store.Queries
 	dev    bool
+	// showLinks — письма не отправляются (dev или не задан SMTP): ссылка подтверждения
+	// возвращается в ответе и показывается на странице «Проверьте почту».
+	showLinks bool
 }
 
 type userJSON struct {
@@ -95,8 +98,8 @@ func (h *authHandler) signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := map[string]any{"email": u.Email}
-	if h.dev {
-		resp["dev_verify_url"] = link // режим разработки: ссылка показывается на странице «Проверьте почту»
+	if h.showLinks {
+		resp["dev_verify_url"] = link
 	}
 	writeJSON(w, http.StatusCreated, resp)
 }
@@ -114,7 +117,7 @@ func (h *authHandler) resend(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := map[string]any{"sent": true}
-	if h.dev && link != "" {
+	if h.showLinks && link != "" {
 		resp["dev_verify_url"] = link
 	}
 	writeJSON(w, http.StatusOK, resp)

@@ -47,6 +47,10 @@ make dev-api      # :8080; миграции применяются при ста
 make dev-web      # :5173; /api проксируется на :8080
 ```
 
+## Развёртывание на сервере
+
+Полная версия разворачивается на VPS с Ubuntu одной командой: `deploy/deploy.sh root@<ip> [домен]`. Внутри — тот же compose за Caddy с HTTPS, секреты генерируются на сервере, база бэкапится раз в сутки. Пошаговая инструкция — в [docs/deploy.md](docs/deploy.md).
+
 ## Демо на GitHub Pages
 
 На каждый пуш в `main` workflow `.github/workflows/pages.yml` собирает статическую версию фронтенда и публикует её на https://zsaveleva.github.io/soremo/.

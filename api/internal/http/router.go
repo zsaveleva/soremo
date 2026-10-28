@@ -31,6 +31,7 @@ type Deps struct {
 	Auth        *auth.Service
 	Access      *access.Service
 	Dev         bool
+	ShowLinks   bool
 	CORSOrigins []string
 }
 
@@ -50,7 +51,7 @@ func NewRouter(d Deps) http.Handler {
 	bh := &buildingsHandler{svc: d.Buildings, q: d.Queries, reports: d.Reports}
 	rh := &reportsHandler{svc: d.Reports, demo: d.Demo, pdf: d.PDF, q: d.Queries}
 	demo := &demoHandler{demo: d.Demo, q: d.Queries}
-	ah := &authHandler{auth: d.Auth, access: d.Access, q: d.Queries, dev: d.Dev}
+	ah := &authHandler{auth: d.Auth, access: d.Access, q: d.Queries, dev: d.Dev, showLinks: d.ShowLinks}
 	acc := &accessHandler{svc: d.Access}
 	dh := &documentsHandler{svc: d.Documents, buildings: d.Buildings, q: d.Queries}
 	oh := &objectsHandler{requests: d.Requests, geo: d.Geocoder, q: d.Queries}

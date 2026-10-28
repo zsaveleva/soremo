@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -135,16 +136,24 @@ func run(ctx context.Context, cfg config.Config) error {
 				return err
 			}
 		}
+		// dev: фиксированные доступы из README. prod: только если заданы переменные окружения.
+		adminEmail, adminPass := env("SEED_ADMIN_EMAIL", ""), env("SEED_ADMIN_PASSWORD", "")
+		demoPass := env("SEED_DEMO_PASSWORD", "")
 		if cfg.IsDev() {
-			hash, err := bcrypt.GenerateFromPassword([]byte("admin1234"), bcrypt.DefaultCost)
+			adminEmail, adminPass, demoPass = "admin@soremo.local", "admin1234", "demo1234"
+		}
+		if adminEmail != "" && adminPass != "" {
+			hash, err := bcrypt.GenerateFromPassword([]byte(adminPass), bcrypt.DefaultCost)
 			if err != nil {
 				return err
 			}
-			if err := q.UpsertAdmin(ctx, store.UpsertAdminParams{Email: "admin@soremo.local", PasswordHash: string(hash)}); err != nil {
+			if err := q.UpsertAdmin(ctx, store.UpsertAdminParams{Email: strings.ToLower(adminEmail), PasswordHash: string(hash)}); err != nil {
 				return err
 			}
-			// Пользователь для показа без регистрации: email подтверждён, пакет на 25 объектов на 6 месяцев.
-			dh, err := bcrypt.GenerateFromPassword([]byte("demo1234"), bcrypt.DefaultCost)
+		}
+		// Пользователь для показа без регистрации: email подтверждён, пакет на 25 объектов на 6 месяцев.
+		if demoPass != "" {
+			dh, err := bcrypt.GenerateFromPassword([]byte(demoPass), bcrypt.DefaultCost)
 			if err != nil {
 				return err
 			}
@@ -210,3 +219,10 @@ func seedDemoReports(ctx context.Context, q *store.Queries, dir string) error {
 }
 
 func ptr(v int32) *int32 { return &v }
+
+func env(key, def string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return def
+}
