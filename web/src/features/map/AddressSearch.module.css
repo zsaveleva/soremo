@@ -101,3 +101,14 @@
 .empty a {
   font-weight: 500;
 }
+
+@media (max-width: 720px), (pointer: coarse) {
+  .input {
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .option {
+    min-height: 44px;
+  }
+}

@@ -184,3 +184,11 @@ html[data-print='1'],
 html[data-print='1'] body {
   background: #fff;
 }
+
+/* Телефоны и планшеты: высота контролов 44 px — минимум для пальца (WCAG 2.5.5). */
+@media (max-width: 720px), (pointer: coarse) {
+  :root {
+    --control-h: 44px;
+    --control-h-sm: 44px;
+  }
+}

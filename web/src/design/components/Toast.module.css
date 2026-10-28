@@ -95,3 +95,11 @@
   color: var(--paper);
   background: rgba(239, 236, 230, 0.1);
 }
+
+@media (max-width: 720px), (pointer: coarse) {
+  .action,
+  .close {
+    height: 44px;
+    min-width: 44px;
+  }
+}

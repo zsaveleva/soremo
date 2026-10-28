@@ -108,3 +108,9 @@
 .sheet[data-expanded] .chev {
   transform: rotate(180deg);
 }
+
+@media (max-width: 720px), (pointer: coarse) {
+  .handle {
+    height: 44px;
+  }
+}

@@ -21,7 +21,7 @@ export function Logo({ to = '/' }: { to?: string }) {
   return (
     <Link to={to} className={s.logo} aria-label="SOREMO CITY — на карту">
       <Footprint />
-      <span className={s.word}>SOREMO CITY</span>
+      <span className={`${s.word} logo-word`}>SOREMO CITY</span>
     </Link>
   );
 }

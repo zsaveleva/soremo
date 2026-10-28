@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
-import { baseStyle } from '../map/mapStyle';
+import { MAP_LOCALE, baseStyle } from '../map/mapStyle';
 import s from './PointPicker.module.css';
 
 type Props = { value: [number, number] | null; onChange: (p: [number, number]) => void; flyTo?: [number, number] | null };
@@ -17,6 +17,7 @@ export function PointPicker({ value, onChange, flyTo }: Props) {
     const m = new maplibregl.Map({
       container: el.current!,
       style: baseStyle(),
+      locale: MAP_LOCALE,
       center: [30.3158, 59.939],
       zoom: 11,
       minZoom: 9,
@@ -26,6 +27,10 @@ export function PointPicker({ value, onChange, flyTo }: Props) {
     });
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
     m.on('click', (e) => cb.current([e.lngLat.lng, e.lngLat.lat]));
+    m.on('load', () => {
+      if (window.matchMedia('(max-width: 720px)').matches)
+        el.current?.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
+    });
     map.current = m;
     return () => m.remove();
   }, []);

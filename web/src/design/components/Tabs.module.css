@@ -50,3 +50,10 @@
 .panel {
   padding-top: var(--s-6);
 }
+
+@media (max-width: 720px), (pointer: coarse) {
+  .tab {
+    min-height: 44px;
+    align-items: center;
+  }
+}

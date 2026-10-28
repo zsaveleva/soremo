@@ -21,9 +21,12 @@ type Props<R> = {
 };
 
 export function Table<R>({ caption, columns, rows, rowKey, onRowClick, dense, empty }: Props<R>) {
+  // Больше трёх колонок на телефоне не помещаются: строки раскладываются карточкой
+  // «подпись колонки — значение». Плотные таблицы админки прокручиваются вбок.
+  const stack = !dense && columns.length > 3;
   return (
     <div className={s.scroll}>
-      <table className={s.table} data-dense={dense || undefined}>
+      <table className={s.table} data-dense={dense || undefined} data-stack={stack || undefined}>
         {caption && <caption className={s.caption}>{caption}</caption>}
         <thead>
           <tr>
@@ -49,7 +52,7 @@ export function Table<R>({ caption, columns, rows, rowKey, onRowClick, dense, em
                 onClick={onRowClick ? () => onRowClick(r) : undefined}
               >
                 {columns.map((c) => (
-                  <td key={c.key} data-numeric={c.numeric || undefined}>
+                  <td key={c.key} data-numeric={c.numeric || undefined} data-label={typeof c.header === 'string' ? c.header : undefined}>
                     {c.render(r)}
                   </td>
                 ))}

@@ -26,8 +26,10 @@
   cursor: pointer;
 }
 
-.item:hover {
-  background: var(--ink-hover);
+@media (hover: hover) {
+  .item:hover {
+    background: var(--ink-hover);
+  }
 }
 
 .item:focus-visible {

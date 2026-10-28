@@ -137,3 +137,28 @@
   background: var(--brick-press);
   color: #fff;
 }
+
+/* Длинная подпись в кнопке на всю ширину переносится, а не раздвигает экран. */
+.block {
+  height: auto;
+  min-height: var(--control-h);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.lg.block {
+  min-height: 48px;
+}
+
+@media (max-width: 720px), (pointer: coarse) {
+  .iconOnly.sm {
+    width: 44px;
+  }
+}
+
+.iconOnly {
+  flex: none;
+}

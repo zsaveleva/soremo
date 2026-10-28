@@ -53,11 +53,71 @@
   cursor: pointer;
 }
 
-.table tr[data-clickable]:hover td {
-  background: var(--ink-hover);
+/* Только для мыши: на сенсорном экране :hover залипает после касания. */
+@media (hover: hover) {
+  .table tr[data-clickable]:hover td {
+    background: var(--ink-hover);
+  }
 }
 
 .empty {
   color: var(--ink-2);
   padding: var(--s-6) 0 !important;
+}
+
+@media (max-width: 720px) {
+  .table[data-dense] {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 560px) {
+  .table[data-stack] thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .table[data-stack] tr {
+    display: grid;
+    gap: 6px;
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .table[data-stack] tbody tr:first-child {
+    border-top: 1px solid var(--ink);
+  }
+
+  .table[data-stack] td {
+    display: grid;
+    grid-template-columns: minmax(96px, 40%) minmax(0, 1fr);
+    gap: var(--s-3);
+    padding: 0;
+    border: 0;
+    text-align: left;
+    white-space: normal;
+  }
+
+  /* Первая колонка — заголовок карточки, без подписи. */
+  .table[data-stack] td:first-child {
+    grid-template-columns: minmax(0, 1fr);
+    font-weight: 500;
+  }
+
+  .table[data-stack] td:not(:first-child)::before {
+    content: attr(data-label);
+    color: var(--ink-2);
+    font-size: var(--fs-13);
+  }
+
+  .table[data-stack] td[data-numeric] {
+    text-align: left;
+  }
+
+  .table[data-stack] .empty {
+    display: block;
+  }
 }

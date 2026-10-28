@@ -1,5 +1,7 @@
 .report {
   display: grid;
+  /* minmax(0, …): широкая таблица прокручивается внутри себя, а не раздвигает страницу. */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .head {

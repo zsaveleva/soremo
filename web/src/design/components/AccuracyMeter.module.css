@@ -57,8 +57,13 @@
   line-height: 1.45;
 }
 
+/* Скрытые подписи не занимают места, иначе шкала не сжимается в узкой ячейке. */
 .meter[data-compact] .label:not([data-current]) {
-  visibility: hidden;
+  display: none;
+}
+
+.meter[data-compact] .scale {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .meter[data-compact] .bar {

@@ -30,3 +30,15 @@ export function baseStyle(): string | StyleSpecification {
   // MapLibre нужен абсолютный адрес; BASE_URL учитывает подкаталог на GitHub Pages.
   return import.meta.env.VITE_MAP_BASE === 'raster' ? rasterStyle : new URL(`${import.meta.env.BASE_URL}map/style.json`, window.location.href).href;
 }
+
+/** Подписи элементов управления MapLibre для скринридеров и подсказок. */
+export const MAP_LOCALE = {
+  'AttributionControl.ToggleAttribution': 'Источники данных карты',
+  'AttributionControl.MapFeedback': 'Сообщить об ошибке на карте',
+  'NavigationControl.ZoomIn': 'Приблизить',
+  'NavigationControl.ZoomOut': 'Отдалить',
+  'NavigationControl.ResetBearing': 'Повернуть на север',
+  'ScrollZoomBlocker.CtrlMessage': 'Чтобы изменить масштаб, прокручивайте с зажатой Ctrl',
+  'ScrollZoomBlocker.CmdMessage': 'Чтобы изменить масштаб, прокручивайте с зажатой ⌘',
+  'TouchPanBlocker.Message': 'Перемещайте карту двумя пальцами',
+};

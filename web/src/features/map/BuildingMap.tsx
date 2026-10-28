@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import maplibregl, { type GeoJSONSource, type MapGeoJSONFeature } from 'maplibre-gl';
 import type { BBox, BuildingFeatureProps, ClusterProps } from '../../api/types';
-import { baseStyle } from './mapStyle';
+import { MAP_LOCALE, baseStyle } from './mapStyle';
 import { INTERACTIVE_LAYERS, SOURCE_ID, addHatchImage, buildingLayers } from './buildingLayers';
 import { contains, padBBox, useBuildings, zoomKeyOf, type Filters, type ViewQuery } from './useBuildings';
 import styles from './BuildingMap.module.css';
@@ -72,6 +72,7 @@ export const BuildingMap = forwardRef<MapHandle, Props>(function BuildingMap(
     const map = new maplibregl.Map({
       container: container.current!,
       style: baseStyle(),
+      locale: MAP_LOCALE,
       ...readView(),
       minZoom: 9,
       maxZoom: 18,
@@ -100,6 +101,9 @@ export const BuildingMap = forwardRef<MapHandle, Props>(function BuildingMap(
     };
 
     map.on('load', () => {
+      // На телефоне атрибуция OSM свёрнута в значок «i», чтобы не закрывать легенду; по нажатию раскрывается.
+      if (window.matchMedia('(max-width: 720px)').matches)
+        container.current?.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
       addHatchImage(map);
       map.addSource(SOURCE_ID, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       buildingLayers.forEach((l) => map.addLayer(l));

@@ -41,3 +41,20 @@
     display: none;
   }
 }
+
+.link {
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+}
+
+@media (max-width: 420px) {
+  .nav {
+    gap: var(--s-3);
+  }
+
+  /* Футпринт в логотипе остаётся, надпись прячется — иначе четыре ссылки не помещаются в 360 px. */
+  .bar :global(.logo-word) {
+    display: none;
+  }
+}

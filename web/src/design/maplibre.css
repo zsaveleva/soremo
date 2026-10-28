@@ -30,3 +30,10 @@
   outline: 2px solid var(--ink);
   outline-offset: -2px;
 }
+
+@media (max-width: 720px), (pointer: coarse) {
+  .maplibregl-ctrl-group button {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}

@@ -166,7 +166,7 @@
   }
 
   .account a {
-    height: 32px;
+    height: 44px;
     padding: 0 var(--s-3);
     font-size: var(--fs-13);
     box-shadow: none;
@@ -190,5 +190,17 @@
 
   .panelSlot {
     position: static;
+  }
+}
+
+@media (max-width: 720px), (pointer: coarse) {
+  .toggle {
+    height: 44px;
+  }
+}
+
+@media (max-width: 720px) {
+  .page:has(.control[data-open]) .legend {
+    display: none;
   }
 }
