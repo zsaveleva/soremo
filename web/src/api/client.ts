@@ -43,7 +43,13 @@ function hasSessionFlag() {
 
 /** Один общий запрос обновления на все параллельные 401. */
 export function refreshSession(): Promise<boolean> {
-  if (import.meta.env.VITE_STATIC === '1' || !hasSessionFlag()) return Promise.resolve(false);
+  if (import.meta.env.VITE_STATIC === '1')
+    return import('./static').then(({ hasStaticSession }) => {
+      const ok = hasStaticSession();
+      setAccessToken(ok ? 'static' : null);
+      return ok;
+    });
+  if (!hasSessionFlag()) return Promise.resolve(false);
   refreshing ??= fetch('/api/v1/auth/refresh', { method: 'POST', credentials: 'include' })
     .then(async (r) => {
       if (!r.ok) {
@@ -69,7 +75,7 @@ type Init = RequestInit & { json?: unknown };
 export async function api<T>(path: string, init: Init = {}, retry = true): Promise<T> {
   if (import.meta.env.VITE_STATIC === '1') {
     const { staticApi } = await import('./static');
-    return (await staticApi(path, init.method ?? 'GET')) as T;
+    return (await staticApi(path, init.method ?? 'GET', init.json)) as T;
   }
   const { json, ...rest } = init;
   const headers: Record<string, string> = { Accept: 'application/json', ...(rest.headers as Record<string, string>) };

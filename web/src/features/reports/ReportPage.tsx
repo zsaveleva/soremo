@@ -11,6 +11,7 @@ import { ReportSkeleton } from './DemoReportPage';
 import { ModelingProgress } from './ModelingProgress';
 import { ImproveForUser, ReportView } from './ReportView';
 import { usePdfDownload } from './usePdfDownload';
+import { IS_STATIC } from '../../api/static';
 import { useStartModelling } from './useStartModelling';
 
 const SCENARIOS = { low: 2, mid: 3, high: 4 };
@@ -119,7 +120,7 @@ export function ReportPage() {
     <>
       <TopBar />
       {canRefine && (
-        <div role="status" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
+        <div role="status" data-no-print style={{ background: 'var(--surface)', borderBottom: '1px solid var(--line)' }}>
           <div style={{ maxWidth: 1148, margin: '0 auto', padding: '12px 16px', display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
             <span>Документ по объекту принят: точность выросла. Пересчёт бесплатный.</span>
             <Button size="sm" variant="primary" onClick={() => start(data.building.id)} pending={pending} pendingLabel="Запускаем…">
@@ -131,7 +132,8 @@ export function ReportPage() {
       <ReportView
         report={data}
         improveAction={<ImproveForUser buildingId={data.building.id} />}
-        onDownload={pdf.download}
+        // В демо без сервера PDF собирает печать браузера: печатная вёрстка та же, что у серверного PDF.
+        onDownload={IS_STATIC ? () => window.print() : pdf.download}
         downloading={pdf.pending}
       />
     </>

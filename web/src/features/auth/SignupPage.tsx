@@ -101,7 +101,7 @@ export function SignupPage() {
           <Field label={type === 'individual' ? 'Место работы' : 'Название компании'} optional error={errors.company_name?.message}>
             {(p) => <Input {...p} autoComplete="organization" {...register('company_name')} />}
           </Field>
-          <Field label="Телефон" optional hint="С кодом города или мобильный, начиная с +7" error={errors.phone?.message}>
+          <Field label="Телефон" optional hint="Начиная с +7" error={errors.phone?.message}>
             {(p) => <Input {...p} type="tel" autoComplete="tel" {...register('phone')} />}
           </Field>
         </div>

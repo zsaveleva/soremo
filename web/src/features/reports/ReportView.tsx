@@ -70,7 +70,7 @@ export function ReportView({ report, improveAction, onDownload, downloading, pri
               <AccuracyMeter level={level} hint={level === 'high' ? 'Отчёт уточнён по техобследованию.' : undefined} />
             </div>
             {!print && onDownload && (
-              <Button icon={ArrowDownToLine} onClick={onDownload} pending={downloading} pendingLabel="Готовим PDF…">
+              <Button data-no-print icon={ArrowDownToLine} onClick={onDownload} pending={downloading} pendingLabel="Готовим PDF…">
                 Скачать PDF
               </Button>
             )}
@@ -189,7 +189,7 @@ export function ReportView({ report, improveAction, onDownload, downloading, pri
                 допустимые функции. Подойдёт техническое заключение или экспертиза не старше пяти лет. Проверка занимает до
                 2 рабочих дней, пересчёт после неё бесплатный.
               </p>
-              {!print && improveAction}
+              {!print && <div data-no-print>{improveAction}</div>}
             </div>
           </DocSection>
         )}

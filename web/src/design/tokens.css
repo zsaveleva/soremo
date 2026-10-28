@@ -166,6 +166,12 @@ a:hover {
 
 /* PDF и печать: белый лист (фон бумаги не доходит до полей страницы), документ — по ширине полосы набора. */
 @media print {
+  header[class*='bar'],
+  [role='region'][aria-label='Уведомления'],
+  [data-no-print] {
+    display: none !important;
+  }
+
   html,
   body {
     background: #fff;

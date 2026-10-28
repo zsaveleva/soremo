@@ -27,6 +27,7 @@ const HINTS: Record<Segment, string> = {
 export function AccountPage() {
   const { user, access, notifications, loading, signOut, reload } = useSession();
   const [params, setParams] = useSearchParams();
+  const [leaving, setLeaving] = useState(false);
   const tab = (params.get('tab') as Tab) ?? (access ? 'objects' : 'access');
   const welcome = (useLocation().state as { welcome?: boolean } | null)?.welcome;
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export function AccountPage() {
   }, [unread.length, reload]);
 
   if (loading) return null;
-  if (!user) return <Navigate to="/login?next=/account" replace />;
+  if (!user) return <Navigate to={leaving ? '/' : '/login?next=/account'} replace />;
 
   const setTab = (t: Tab) => setParams({ tab: t }, { replace: true });
 
@@ -62,9 +63,10 @@ export function AccountPage() {
           <Button
             variant="ghost"
             icon={LogOut}
-            onClick={async () => {
-              await signOut();
-              navigate('/');
+            onClick={() => {
+              // Пока грузится экран карты, кабинет ещё на экране; флаг не даёт ему перекинуть на вход.
+              setLeaving(true);
+              void signOut();
             }}
           >
             Выйти

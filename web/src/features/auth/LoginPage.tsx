@@ -7,6 +7,7 @@ import { api, ApiError, type SessionPayload } from '../../api/client';
 import { Button, Field, Input } from '../../design/components';
 import { AuthLayout } from './AuthLayout';
 import { useSession } from './session';
+import { DEMO_EMAIL, DEMO_PASSWORD, IS_STATIC } from '../../api/static';
 import s from './forms.module.css';
 
 const schema = z.object({
@@ -26,7 +27,12 @@ export function LoginPage() {
     setError,
     getValues,
     formState: { errors, isSubmitting },
-  } = useForm<Form>({ resolver: zodResolver(schema), mode: 'onTouched' });
+  } = useForm<Form>({
+    resolver: zodResolver(schema),
+    mode: 'onTouched',
+    // В демо без сервера работает один аккаунт — поля заполнены, чтобы войти одним нажатием.
+    defaultValues: IS_STATIC ? { email: DEMO_EMAIL, password: DEMO_PASSWORD } : undefined,
+  });
 
   const onSubmit = handleSubmit(async (v) => {
     setUnverified(null);
