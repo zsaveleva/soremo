@@ -1,0 +1,22 @@
+.content { display: grid; gap: var(--s-4); }
+.intro { color: var(--ink-2); }
+.document { padding: var(--s-4) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+.document p { font-size: var(--fs-20); font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
+.documentLabel { font-size: var(--fs-13); color: var(--ink-2); }
+.accessState { margin-top: var(--s-1); }
+.field { display: grid; gap: var(--s-2); font-size: var(--fs-13); font-weight: 500; min-width: 0; }
+.field input { font-size: var(--fs-13); font-weight: 400; width: 100%; }
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--s-2); width: 100%; }
+.note { font-size: 14px; }
+.revokeNote { color: var(--ink-2); font-size: var(--fs-13); }
+.error { padding-left: var(--s-3); border-left: 2px solid var(--brick); font-size: 14px; }
+@media (max-width: 560px) {
+  .actions { flex-direction: column-reverse; }
+  .actions > button { width: 100%; }
+  .document p { font-size: var(--fs-17); }
+}
+@media (max-height: 650px) {
+  .content { gap: var(--s-3); }
+  .document { padding: var(--s-3) 0; gap: 4px; }
+  .intro { font-size: var(--fs-13); }
+}
