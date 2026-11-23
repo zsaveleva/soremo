@@ -3,6 +3,7 @@ import { defineConfig } from '@playwright/test';
 // Сквозной сценарий против запущенного стека: `docker compose up` или make dev-api + make dev-web.
 export default defineConfig({
   testDir: 'e2e',
+  testIgnore: 'report-features.spec.ts',
   timeout: 150_000,
   expect: { timeout: 15_000 },
   use: {

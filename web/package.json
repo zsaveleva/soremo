@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "map-style": "node scripts/build-map-style.mjs",
     "e2e": "playwright test",
-    "build:static": "node scripts/build-static-data.mjs && VITE_STATIC=1 vite build && cp dist/index.html dist/404.html"
+    "build:static": "node scripts/build-static-data.mjs && VITE_STATIC=1 vite build && cp dist/index.html dist/404.html",
+    "test:features": "playwright test --config playwright.features.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.1",

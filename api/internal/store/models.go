@@ -50,6 +50,11 @@ type Building struct {
 	CreatedBy        uuid.NullUUID
 	CreatedAt        pgtype.Timestamptz
 	DemoSlug         pgtype.Text
+	YearSource       string
+	Zones            []byte
+	ZonesSource      pgtype.Text
+	ZonesCheckedOn   pgtype.Date
+	ZonesDemo        bool
 }
 
 type City struct {
@@ -173,6 +178,8 @@ type Report struct {
 	PdfKey        pgtype.Text
 	CreatedAt     pgtype.Timestamptz
 	FinishedAt    pgtype.Timestamptz
+	ShareToken    pgtype.Text
+	SharedAt      pgtype.Timestamptz
 }
 
 type User struct {

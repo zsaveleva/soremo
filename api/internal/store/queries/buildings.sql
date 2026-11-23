@@ -52,11 +52,12 @@ GROUP BY ST_SnapToGrid(b.centroid, @cell_deg::float8);
 SELECT b.id, b.city_id, b.address, b.name, b.year_built, b.original_function, b.floors,
        b.area_total_m2::float8 AS area_total_m2, b.area_site_m2::float8 AS area_site_m2,
        b.area_footprint_m2::float8 AS area_footprint_m2, b.vri, b.pzz_zone, b.is_okn,
-       b.legal_status, b.source, b.status, b.is_demo, b.created_by,
+       b.legal_status, b.source, b.status, b.is_demo, b.created_by, b.created_at,
+       b.year_source, b.zones, b.zones_source, b.zones_checked_on, b.zones_demo,
        ST_AsGeoJSON(b.geom, 6)::text AS geometry,
        ST_X(b.centroid)::float8 AS lon, ST_Y(b.centroid)::float8 AS lat,
        c.metro_name, c.metro_dist_m, c.transit_index, c.social_500m,
-       c.commercial_density, c.business_activity
+       c.commercial_density, c.business_activity, c.updated_at AS context_updated_at
 FROM buildings b
 JOIN context_metrics c ON c.building_id = b.id
 WHERE b.id = $1;
@@ -106,6 +107,12 @@ ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash, role =
 -- name: SetDemoSlug :exec
 UPDATE buildings SET demo_slug = $2 WHERE id = $1;
 
+-- name: SetBuildingPassport :exec
+UPDATE buildings
+SET year_source = @year_source, zones = @zones, zones_source = @zones_source,
+    zones_checked_on = @zones_checked_on, zones_demo = @zones_demo
+WHERE id = @id;
+
 -- name: GetBuildingIDByDemoSlug :one
 SELECT id FROM buildings WHERE demo_slug = $1;
 
@@ -139,7 +146,8 @@ LIMIT 8;
 -- name: DocumentStatsForBuilding :one
 SELECT count(*) FILTER (WHERE status = 'pending')::int AS pending,
        count(*) FILTER (WHERE status = 'accepted')::int AS accepted,
-       coalesce(array_agg(DISTINCT kind) FILTER (WHERE status = 'accepted'), '{}')::text[] AS accepted_kinds
+       coalesce(array_agg(DISTINCT kind) FILTER (WHERE status = 'accepted'), '{}')::text[] AS accepted_kinds,
+       max(issued_on) FILTER (WHERE status = 'accepted')::date AS latest_accepted_on
 FROM documents WHERE building_id = $1;
 
 -- name: UpsertDemoUser :one

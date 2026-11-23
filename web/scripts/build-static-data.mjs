@@ -8,6 +8,7 @@ const out = new URL('../public/data/', import.meta.url);
 rmSync(out, { recursive: true, force: true });
 mkdirSync(new URL('pdf/', out), { recursive: true });
 
+const zones = JSON.parse(readFileSync(new URL('zones.json', seed)));
 const fc = JSON.parse(readFileSync(new URL('buildings.geojson', seed)));
 
 // id совпадают с базой после `make seed`: здания вставляются в порядке файла.
@@ -21,6 +22,11 @@ const buildings = fc.features.map((f, i) => {
     address: p.address,
     name: p.name || null,
     year_built: p.year_built,
+    year_source: p.year_source,
+    zones: Object.hasOwn(zones.buildings, String(p.osm_id)) ? {
+      items: zones.buildings[String(p.osm_id)].map((code) => zones.catalogue[code]),
+      source: zones.source, checked_on: zones.checked_on, demo: zones.demo,
+    } : null,
     original_function: p.original_function,
     floors: p.floors,
     area_total_m2: p.area_total_m2,

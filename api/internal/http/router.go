@@ -3,6 +3,7 @@ package httpapi
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -68,6 +69,9 @@ func NewRouter(d Deps) http.Handler {
 		r.Get("/demo/buildings", demo.buildings)
 		r.Get("/demo/reports/{buildingID}", demo.report)
 		r.Get("/demo/reports/{buildingID}/pdf", rh.demoPDF)
+		// Ссылка на отчёт для инвестора или банка: без входа, ключ — токен.
+		r.With(rateLimit(60, 20)).Get("/shared/{token}", rh.shared)
+		r.With(rateLimit(20, 5)).Get("/shared/{token}/pdf", rh.sharedPDF)
 
 		r.Route("/auth", func(r chi.Router) {
 			// Подбор пароля и массовая регистрация — строгий лимит; refresh вызывается
@@ -94,6 +98,8 @@ func NewRouter(d Deps) http.Handler {
 			r.Get("/access/current", acc.current)
 			r.Post("/buildings/{id}/reports", rh.start)
 			r.Get("/reports/{id}/pdf", rh.pdfFile)
+			r.Post("/reports/{id}/share", rh.share)
+			r.Delete("/reports/{id}/share", rh.unshare)
 			r.Get("/me/reports", rh.mine)
 
 			r.Post("/buildings/{id}/documents", dh.upload)
@@ -126,7 +132,15 @@ func requestLogger(base zerolog.Logger) func(http.Handler) http.Handler {
 			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
 			l := base.With().Str("req_id", middleware.GetReqID(r.Context())).Logger()
 			next.ServeHTTP(ww, r.WithContext(l.WithContext(r.Context())))
-			l.Info().Str("method", r.Method).Str("path", r.URL.Path).
+			path := r.URL.Path
+			if strings.HasPrefix(path, "/api/v1/shared/") {
+				suffix := ""
+				if strings.HasSuffix(path, "/pdf") {
+					suffix = "/pdf"
+				}
+				path = "/api/v1/shared/[token]" + suffix
+			}
+			l.Info().Str("method", r.Method).Str("path", path).
 				Int("status", ww.Status()).Dur("dur", time.Since(start)).Msg("http")
 		})
 	}

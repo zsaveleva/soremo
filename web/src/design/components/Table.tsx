@@ -17,13 +17,14 @@ type Props<R> = {
   rowKey: (row: R) => string | number;
   onRowClick?: (row: R) => void;
   dense?: boolean;
+  stack?: boolean;
   empty?: ReactNode;
 };
 
-export function Table<R>({ caption, columns, rows, rowKey, onRowClick, dense, empty }: Props<R>) {
+export function Table<R>({ caption, columns, rows, rowKey, onRowClick, dense, stack: stackOverride, empty }: Props<R>) {
   // Больше трёх колонок на телефоне не помещаются: строки раскладываются карточкой
   // «подпись колонки — значение». Плотные таблицы админки прокручиваются вбок.
-  const stack = !dense && columns.length > 3;
+  const stack = stackOverride ?? (!dense && columns.length > 3);
   return (
     <div className={s.scroll}>
       <table className={s.table} data-dense={dense || undefined} data-stack={stack || undefined}>

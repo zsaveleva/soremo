@@ -22,7 +22,7 @@ type MockEngine struct {
 	Delay func(in EngineInput) time.Duration
 }
 
-func (MockEngine) Version() string { return "mock-1.0" }
+func (MockEngine) Version() string { return "mock-1.1" }
 
 func (m MockEngine) Run(ctx context.Context, in EngineInput) (EngineOutput, error) {
 	d := m.delay(in)
@@ -290,6 +290,7 @@ func Assess(in EngineInput) EngineOutput {
 	case AccuracyMid:
 		out.Warnings = append(out.Warnings, "Средняя точность: принят документ общего характера. Техническое обследование сузит диапазоны и может изменить порядок сценариев.")
 	}
+	Annotate(in, &out)
 	return out
 }
 

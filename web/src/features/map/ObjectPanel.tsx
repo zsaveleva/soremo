@@ -6,6 +6,7 @@ import { FUNCTION_LABEL } from '../../lib/labels';
 import { formatArea, formatDate, formatObjects } from '../../lib/format';
 import { contextRows } from '../../lib/context';
 import { useSession } from '../auth/session';
+import { PassportSummary, PassportTable, SourceLinks, ZonesList } from '../reports/Facts';
 import s from './ObjectPanel.module.css';
 
 export function ObjectPanelBody({ id }: { id: number }) {
@@ -90,6 +91,15 @@ function ObjectCard({ b }: { b: BuildingCard }) {
         </dl>
       </section>
 
+      <section aria-labelledby="zones-h">
+        <h3 id="zones-h" className={s.h3}>Зоны и ограничения</h3>
+        <ZonesList b={b} compact />
+        <SourceLinks />
+      </section>
+      <details>
+        <PassportSummary>Паспорт: источники и даты</PassportSummary>
+        <PassportTable b={b} />
+      </details>
       <section aria-labelledby="acc-h">
         <h3 id="acc-h" className={s.h3}>
           Точность

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"math"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -131,6 +132,11 @@ type Card struct {
 	Center           [2]float64      `json:"center"`
 	Context          Context         `json:"context"`
 	Accuracy         Accuracy        `json:"accuracy"`
+	CreatedAt        time.Time       `json:"created_at"`
+	// YearSource — откуда год постройки: osm, manual, generated (оценка), user.
+	YearSource string `json:"year_source"`
+	// Zones — пересечения участка с зонами; nil, если не проверялись.
+	Zones *Zones `json:"zones"`
 	// MyReportID is filled by the HTTP layer for signed-in users.
 	MyReportID *string `json:"my_report_id"`
 }
@@ -139,6 +145,17 @@ type Accuracy struct {
 	Level        engine.AccuracyLevel `json:"level"`
 	DocsPending  int32                `json:"docs_pending"`
 	DocsAccepted int32                `json:"docs_accepted"`
+	// LatestAcceptedOn — дата самого свежего принятого документа (YYYY-MM-DD).
+	LatestAcceptedOn *string `json:"latest_accepted_on"`
+}
+
+// Zones is the zones layer for a building with its source and date (паспорт).
+type Zones struct {
+	Items     []engine.Zone `json:"items"`
+	Source    string        `json:"source"`
+	CheckedOn string        `json:"checked_on"`
+	// Demo — слой сгенерирован по правилам, а не загружен из РГИС.
+	Demo bool `json:"demo"`
 }
 
 type Context struct {
@@ -148,6 +165,8 @@ type Context struct {
 	Social500m        int32  `json:"social_500m"`
 	CommercialDensity int32  `json:"commercial_density"`
 	BusinessActivity  int32  `json:"business_activity"`
+	// UpdatedAt — когда метрики окружения пересчитаны.
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (s *Service) Get(ctx context.Context, id int64) (Card, error) {
@@ -166,16 +185,32 @@ func (s *Service) Get(ctx context.Context, id int64) (Card, error) {
 		Context: Context{
 			MetroName: r.MetroName, MetroDistM: r.MetroDistM, TransitIndex: r.TransitIndex,
 			Social500m: r.Social500m, CommercialDensity: r.CommercialDensity, BusinessActivity: r.BusinessActivity,
+			UpdatedAt: r.ContextUpdatedAt.Time,
 		},
+		CreatedAt: r.CreatedAt.Time, YearSource: r.YearSource,
 	}
 	if r.Name.Valid {
 		c.Name = &r.Name.String
+	}
+	if r.Zones != nil {
+		z := Zones{Source: r.ZonesSource.String, Demo: r.ZonesDemo}
+		if err := json.Unmarshal(r.Zones, &z.Items); err != nil {
+			return Card{}, err
+		}
+		if r.ZonesCheckedOn.Valid {
+			z.CheckedOn = r.ZonesCheckedOn.Time.Format(time.DateOnly)
+		}
+		c.Zones = &z
 	}
 	st, err := s.q.DocumentStatsForBuilding(ctx, id)
 	if err != nil {
 		return Card{}, err
 	}
 	c.Accuracy = Accuracy{Level: engine.AccuracyFor(st.AcceptedKinds), DocsPending: st.Pending, DocsAccepted: st.Accepted}
+	if st.LatestAcceptedOn.Valid {
+		d := st.LatestAcceptedOn.Time.Format(time.DateOnly)
+		c.Accuracy.LatestAcceptedOn = &d
+	}
 	return c, nil
 }
 
@@ -232,4 +267,12 @@ func b(v *bool) pgtype.Bool {
 		return pgtype.Bool{}
 	}
 	return pgtype.Bool{Bool: *v, Valid: true}
+}
+
+// EngineZones returns the zones for the engine input: nil when not checked.
+func (c Card) EngineZones() []engine.Zone {
+	if c.Zones == nil {
+		return nil
+	}
+	return c.Zones.Items
 }

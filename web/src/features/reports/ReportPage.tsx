@@ -13,6 +13,7 @@ import { ImproveForUser, ReportView } from './ReportView';
 import { usePdfDownload } from './usePdfDownload';
 import { IS_STATIC } from '../../api/static';
 import { useStartModelling } from './useStartModelling';
+import { ShareReport } from './ShareReport';
 
 const SCENARIOS = { low: 2, mid: 3, high: 4 };
 
@@ -135,6 +136,7 @@ export function ReportPage() {
         // В демо без сервера PDF собирает печать браузера: печатная вёрстка та же, что у серверного PDF.
         onDownload={IS_STATIC ? () => window.print() : pdf.download}
         downloading={pdf.pending}
+        actions={!IS_STATIC && data.can_share ? <ShareReport report={data} /> : undefined}
       />
     </>
   );

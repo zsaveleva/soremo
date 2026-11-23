@@ -99,7 +99,7 @@ func (q *Queries) CompleteJob(ctx context.Context, id int64) error {
 const createReport = `-- name: CreateReport :one
 INSERT INTO reports (building_id, user_id, access_id, accuracy_level, engine_version, input_snapshot, status)
 VALUES ($1, $2, $3, $4, $5, $6, 'queued')
-RETURNING id, building_id, user_id, access_id, accuracy_level, engine_version, input_snapshot, result, status, pdf_key, created_at, finished_at
+RETURNING id, building_id, user_id, access_id, accuracy_level, engine_version, input_snapshot, result, status, pdf_key, created_at, finished_at, share_token, shared_at
 `
 
 type CreateReportParams struct {
@@ -134,6 +134,8 @@ func (q *Queries) CreateReport(ctx context.Context, arg CreateReportParams) (Rep
 		&i.PdfKey,
 		&i.CreatedAt,
 		&i.FinishedAt,
+		&i.ShareToken,
+		&i.SharedAt,
 	)
 	return i, err
 }
@@ -177,7 +179,7 @@ func (q *Queries) FinishReport(ctx context.Context, arg FinishReportParams) erro
 }
 
 const getReport = `-- name: GetReport :one
-SELECT id, building_id, user_id, access_id, accuracy_level, engine_version, input_snapshot, result, status, pdf_key, created_at, finished_at FROM reports WHERE id = $1
+SELECT id, building_id, user_id, access_id, accuracy_level, engine_version, input_snapshot, result, status, pdf_key, created_at, finished_at, share_token, shared_at FROM reports WHERE id = $1
 `
 
 func (q *Queries) GetReport(ctx context.Context, id uuid.UUID) (Report, error) {
@@ -196,6 +198,34 @@ func (q *Queries) GetReport(ctx context.Context, id uuid.UUID) (Report, error) {
 		&i.PdfKey,
 		&i.CreatedAt,
 		&i.FinishedAt,
+		&i.ShareToken,
+		&i.SharedAt,
+	)
+	return i, err
+}
+
+const getReportByShareToken = `-- name: GetReportByShareToken :one
+SELECT id, building_id, user_id, access_id, accuracy_level, engine_version, input_snapshot, result, status, pdf_key, created_at, finished_at, share_token, shared_at FROM reports WHERE share_token = $1
+`
+
+func (q *Queries) GetReportByShareToken(ctx context.Context, shareToken pgtype.Text) (Report, error) {
+	row := q.db.QueryRow(ctx, getReportByShareToken, shareToken)
+	var i Report
+	err := row.Scan(
+		&i.ID,
+		&i.BuildingID,
+		&i.UserID,
+		&i.AccessID,
+		&i.AccuracyLevel,
+		&i.EngineVersion,
+		&i.InputSnapshot,
+		&i.Result,
+		&i.Status,
+		&i.PdfKey,
+		&i.CreatedAt,
+		&i.FinishedAt,
+		&i.ShareToken,
+		&i.SharedAt,
 	)
 	return i, err
 }
@@ -320,5 +350,37 @@ UPDATE reports SET status = 'running' WHERE id = $1 AND status = 'queued'
 
 func (q *Queries) SetReportRunning(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.Exec(ctx, setReportRunning, id)
+	return err
+}
+
+const shareReport = `-- name: ShareReport :one
+UPDATE reports SET share_token = coalesce(share_token, $1), shared_at = coalesce(shared_at, now())
+WHERE id = $2
+RETURNING share_token::text AS share_token, shared_at::timestamptz AS shared_at
+`
+
+type ShareReportParams struct {
+	Token pgtype.Text
+	ID    uuid.UUID
+}
+
+type ShareReportRow struct {
+	ShareToken string
+	SharedAt   pgtype.Timestamptz
+}
+
+func (q *Queries) ShareReport(ctx context.Context, arg ShareReportParams) (ShareReportRow, error) {
+	row := q.db.QueryRow(ctx, shareReport, arg.Token, arg.ID)
+	var i ShareReportRow
+	err := row.Scan(&i.ShareToken, &i.SharedAt)
+	return i, err
+}
+
+const unshareReport = `-- name: UnshareReport :exec
+UPDATE reports SET share_token = NULL, shared_at = NULL WHERE id = $1
+`
+
+func (q *Queries) UnshareReport(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, unshareReport, id)
 	return err
 }
