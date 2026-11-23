@@ -1,0 +1,7 @@
+.accessNote { max-width: 1180px; margin: var(--s-4) auto 0; padding: 0 var(--s-4); display: flex; gap: var(--s-2); align-items: center; color: var(--ink-2); font-size: var(--fs-13); }
+.error { max-width: 560px; padding-top: var(--s-6); }
+.errorIcon { color: var(--ink-2); margin-bottom: var(--s-4); }
+.title { font-family: var(--font-display); font-size: var(--fs-26); line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; }
+.description { margin-top: var(--s-4); color: var(--ink-2); max-width: 480px; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-6); }
+@media (max-width: 560px) { .actions > * { flex: 1 1 auto; } .title { font-size: var(--fs-20); } }
