@@ -5,10 +5,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -28,6 +31,7 @@ type seedFeature struct {
 		Address           string  `json:"address"`
 		Name              string  `json:"name"`
 		YearBuilt         int32   `json:"year_built"`
+		YearSource        string  `json:"year_source"`
 		OriginalFunction  string  `json:"original_function"`
 		Floors            int32   `json:"floors"`
 		AreaTotal         float64 `json:"area_total_m2"`
@@ -91,6 +95,11 @@ func run(ctx context.Context, cfg config.Config) error {
 		return fmt.Errorf("parse buildings.geojson: %w", err)
 	}
 
+	zl, err := loadZones(filepath.Join(cfg.SeedDir, "zones.json"))
+	if err != nil {
+		return err
+	}
+
 	return pgx.BeginFunc(ctx, pool, func(tx pgx.Tx) error {
 		q := store.New(tx)
 		cityID, err := q.UpsertCity(ctx, store.UpsertCityParams{
@@ -110,6 +119,9 @@ func run(ctx context.Context, cfg config.Config) error {
 				Vri: p.VRI, PzzZone: p.PZZZone, IsOkn: p.IsOKN, LegalStatus: p.LegalStatus, IsDemo: p.IsDemo,
 			})
 			if err != nil {
+				return fmt.Errorf("building osm %d: %w", p.OSMID, err)
+			}
+			if err := setPassport(ctx, q, id, p.OSMID, p.YearSource, zl); err != nil {
 				return fmt.Errorf("building osm %d: %w", p.OSMID, err)
 			}
 			if p.DemoSlug != "" {
@@ -216,6 +228,62 @@ func seedDemoReports(ctx context.Context, q *store.Queries, dir string) error {
 		}
 	}
 	return nil
+}
+
+// zonesLayer is seed/zones.json, built by seed/zones from buildings.geojson.
+type zonesLayer struct {
+	Source    string                 `json:"source"`
+	CheckedOn string                 `json:"checked_on"`
+	Demo      bool                   `json:"demo"`
+	Catalogue map[string]engine.Zone `json:"catalogue"`
+	Buildings map[string][]string    `json:"buildings"`
+}
+
+func loadZones(path string) (*zonesLayer, error) {
+	raw, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, nil // без слоя зоны остаются «не проверены»
+	}
+	if err != nil {
+		return nil, err
+	}
+	var z zonesLayer
+	if err := json.Unmarshal(raw, &z); err != nil {
+		return nil, fmt.Errorf("parse zones.json: %w", err)
+	}
+	return &z, nil
+}
+
+func setPassport(ctx context.Context, q *store.Queries, id, osmID int64, yearSource string, zl *zonesLayer) error {
+	if yearSource == "" {
+		yearSource = "generated"
+	}
+	arg := store.SetBuildingPassportParams{ID: id, YearSource: yearSource}
+	if zl != nil {
+		if codes, ok := zl.Buildings[strconv.FormatInt(osmID, 10)]; ok {
+			items := make([]engine.Zone, 0, len(codes))
+			for _, c := range codes {
+				z, ok := zl.Catalogue[c]
+				if !ok {
+					return fmt.Errorf("zones.json: unknown zone %q", c)
+				}
+				items = append(items, z)
+			}
+			raw, err := json.Marshal(items)
+			if err != nil {
+				return err
+			}
+			day, err := time.Parse(time.DateOnly, zl.CheckedOn)
+			if err != nil {
+				return fmt.Errorf("zones.json checked_on: %w", err)
+			}
+			arg.Zones = raw
+			arg.ZonesSource = pgtype.Text{String: zl.Source, Valid: true}
+			arg.ZonesCheckedOn = pgtype.Date{Time: day, Valid: true}
+			arg.ZonesDemo = zl.Demo
+		}
+	}
+	return q.SetBuildingPassport(ctx, arg)
 }
 
 func ptr(v int32) *int32 { return &v }

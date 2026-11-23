@@ -20,7 +20,7 @@ var ErrNotFound = errors.New("report not found")
 // View is the report as the frontend and the PDF template see it.
 type View struct {
 	ID            string               `json:"id"`
-	Kind          string               `json:"kind"` // demo | user
+	Kind          string               `json:"kind"` // demo | user | shared
 	Status        string               `json:"status"`
 	AccuracyLevel engine.AccuracyLevel `json:"accuracy_level"`
 	EngineVersion string               `json:"engine_version"`
@@ -30,6 +30,9 @@ type View struct {
 	Refined  bool                 `json:"refined"`
 	Building buildings.Card       `json:"building"`
 	Result   *engine.EngineOutput `json:"result"`
+	// Share — открытая ссылка на отчёт; видит только владелец.
+	Share    *Share `json:"share,omitempty"`
+	CanShare bool   `json:"can_share,omitempty"`
 }
 
 type Demo struct {
@@ -57,6 +60,8 @@ func (d *Demo) Get(ctx context.Context, buildingID int64) (View, error) {
 	}
 	// Демо-отчёт показывает свой уровень точности, а не уровень по документам базы.
 	card.Accuracy.Level = out.AccuracyLevel
+	// Демо написаны вручную: пояснения к сценариям считает тот же движок.
+	engine.Annotate(InputFor(card, nil, out.AccuracyLevel), &out)
 	t := r.UpdatedAt.Time
 	return View{
 		ID: fmt.Sprintf("demo-%d", buildingID), Kind: "demo", Status: "ready",

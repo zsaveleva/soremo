@@ -4,7 +4,9 @@
 // отличаются от серверных, но правила совпадают.
 import type { AccuracyLevel, BuildingCard, EngineOutput, Scenario, TEPValues } from './types';
 
-export const ENGINE_VERSION = 'mock-1.0-browser';
+import { annotateStatic } from './staticAnalysis';
+
+export const ENGINE_VERSION = 'mock-1.1-browser';
 
 type In = { b: BuildingCard; level: AccuracyLevel };
 
@@ -307,7 +309,7 @@ export function assess(b: BuildingCard, level: AccuracyLevel): EngineOutput {
   if (level === 'low')
     warnings.push('Низкая точность: техническое состояние здания не известно, капвложения оценены по аналогам. Загрузите техническое обследование, чтобы получить четыре сценария и точечные значения.');
   warnings.push('Демо-версия: расчёт выполнен в браузере тем же набором правил, что и на сервере.');
-  return { summary: summary(i, scenarios), scenarios, methodology: METHODOLOGY, accuracy_level: level, warnings };
+  return annotateStatic(b, { summary: summary(i, scenarios), scenarios, methodology: METHODOLOGY, accuracy_level: level, warnings });
 }
 
 /** Время расчёта, как у серверной заглушки: 3–8 секунд по id здания. */

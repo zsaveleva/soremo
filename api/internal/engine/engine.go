@@ -61,6 +61,18 @@ type Building struct {
 	VRI              string  `json:"vri"`
 	PZZZone          string  `json:"pzz_zone"`
 	IsOKN            bool    `json:"is_okn"`
+	// YearSource — откуда год постройки: osm, manual, generated (оценка) или user.
+	YearSource string `json:"year_source,omitempty"`
+	// Source — base (база сервиса) или user (добавлен пользователем).
+	Source string `json:"source,omitempty"`
+}
+
+// Zone is a zone with special conditions intersecting the site (РГИС, НСПД).
+type Zone struct {
+	Code   string `json:"code"`
+	Title  string `json:"title"`
+	Effect string `json:"effect"` // restriction | check | info
+	Note   string `json:"note"`
 }
 
 type Context struct {
@@ -83,6 +95,9 @@ type EngineInput struct {
 	Context       Context       `json:"context"`
 	Documents     []Document    `json:"documents"`
 	AccuracyLevel AccuracyLevel `json:"accuracy_level"`
+	// Zones — nil, если пересечения с зонами для объекта не проверены.
+	Zones     []Zone `json:"zones"`
+	ZonesDemo bool   `json:"zones_demo,omitempty"`
 }
 
 type EngineOutput struct {
@@ -91,6 +106,44 @@ type EngineOutput struct {
 	Methodology   string        `json:"methodology"`
 	AccuracyLevel AccuracyLevel `json:"accuracy_level"`
 	Warnings      []string      `json:"warnings"`
+	// TechRisks — что в техническом состоянии может сдвинуть бюджет.
+	TechRisks []TechRisk `json:"tech_risks,omitempty"`
+	// NextSteps — что сделать собственнику после отчёта, по порядку.
+	NextSteps []string `json:"next_steps,omitempty"`
+}
+
+// TechRisk is one building element whose condition may change the budget.
+// Reserve is the percent of capex to keep for it, e.g. 5–15.
+type TechRisk struct {
+	Element string `json:"element"`
+	Note    string `json:"note"`
+	Reserve Range  `json:"reserve"`
+}
+
+type Feasibility string
+
+const (
+	Feasible   Feasibility = "feasible"   // реализуемо
+	NeedsCheck Feasibility = "check"      // нужна проверка
+	Restricted Feasibility = "restricted" // есть ограничение
+)
+
+// Check is one ground of the feasibility verdict.
+type Check struct {
+	Status Feasibility `json:"status"`
+	Text   string      `json:"text"`
+}
+
+// FeasibilityVerdict — итог проверки реализуемости: худший из статусов оснований.
+type FeasibilityVerdict struct {
+	Status Feasibility `json:"status"`
+	Checks []Check     `json:"checks"`
+}
+
+// Evidence lists which inputs behind a scenario are confirmed and which are missing.
+type Evidence struct {
+	Confirmed []string `json:"confirmed"`
+	Missing   []string `json:"missing"`
 }
 
 type Scale string
@@ -113,6 +166,11 @@ type Scenario struct {
 	Risks       []string    `json:"risks"`
 	// Assumptions behind Economics, shown under the numbers so they can be checked.
 	Assumptions *Assumptions `json:"assumptions,omitempty"`
+
+	Feasibility *FeasibilityVerdict `json:"feasibility,omitempty"`
+	Pros        []string            `json:"pros,omitempty"`
+	Cons        []string            `json:"cons,omitempty"`
+	Evidence    *Evidence           `json:"evidence,omitempty"`
 }
 
 type Assumptions struct {

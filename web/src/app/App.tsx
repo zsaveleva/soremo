@@ -11,6 +11,7 @@ const MapPage = lazy(() => import('../features/map/MapPage').then((m) => ({ defa
 const DesignPage = lazy(() => import('../design/DesignPage').then((m) => ({ default: m.DesignPage })));
 const DemoReportPage = lazy(() => import('../features/reports/DemoReportPage').then((m) => ({ default: m.DemoReportPage })));
 const ReportPage = lazy(() => import('../features/reports/ReportPage').then((m) => ({ default: m.ReportPage })));
+const SharedReportPage = lazy(() => import('../features/reports/SharedReportPage').then((m) => ({ default: m.SharedReportPage })));
 const PrintPage = lazy(() => import('../features/reports/PrintPage').then((m) => ({ default: m.PrintPage })));
 const SignupPage = lazy(() => import('../features/auth/SignupPage').then((m) => ({ default: m.SignupPage })));
 const LoginPage = lazy(() => import('../features/auth/LoginPage').then((m) => ({ default: m.LoginPage })));
@@ -42,6 +43,7 @@ export function App() {
                 <Route path="/design" element={<DesignPage />} />
                 <Route path="/demo/:buildingId" element={<DemoReportPage />} />
                 <Route path="/reports/:id" element={<ReportPage />} />
+                <Route path="/shared/:token" element={<SharedReportPage />} />
                 <Route path="/print/reports/:id" element={<PrintPage kind="user" />} />
                 <Route path="/print/demo/:id" element={<PrintPage kind="demo" />} />
                 <Route path="/signup" element={<SignupPage />} />

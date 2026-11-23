@@ -34,7 +34,24 @@ export type BuildingContext = {
   social_500m: number;
   commercial_density: number;
   business_activity: number;
+  /** Когда метрики окружения пересчитаны. */
+  updated_at?: string;
 };
+
+export type ZoneEffect = 'restriction' | 'check' | 'info';
+
+/** Зона с особыми условиями, пересекающая участок (РГИС, НСПД). */
+export type Zone = { code: string; title: string; effect: ZoneEffect; note: string };
+
+export type BuildingZones = {
+  items: Zone[];
+  source: string;
+  checked_on: string;
+  /** Слой сгенерирован по правилам, а не загружен из РГИС. */
+  demo: boolean;
+};
+
+export type YearSource = 'osm' | 'manual' | 'generated' | 'user';
 
 export type BuildingCard = {
   id: number;
@@ -55,8 +72,12 @@ export type BuildingCard = {
   geometry: Polygon;
   center: [number, number];
   context: BuildingContext;
-  accuracy: { level: AccuracyLevel; docs_pending: number; docs_accepted: number };
+  accuracy: { level: AccuracyLevel; docs_pending: number; docs_accepted: number; latest_accepted_on?: string | null };
   my_report_id: string | null;
+  created_at?: string;
+  year_source?: YearSource;
+  /** null — пересечения с зонами не проверялись. */
+  zones?: BuildingZones | null;
 };
 
 export type SearchHit = {
@@ -84,7 +105,19 @@ export type Scenario = {
   economics: { capex_rub: NumRange; term_months: NumRange; revenue_year_rub: NumRange; payback_years: NumRange };
   risks: string[];
   assumptions?: { capex_per_m2_rub: number; rent_rub_m2_month: number; occupancy: number; noi_share: number };
+  feasibility?: FeasibilityVerdict;
+  pros?: string[];
+  cons?: string[];
+  evidence?: { confirmed: string[]; missing: string[] };
 };
+
+/** Реализуемо, нужна проверка, есть ограничение. */
+export type Feasibility = 'feasible' | 'check' | 'restricted';
+
+export type FeasibilityVerdict = { status: Feasibility; checks: { status: Feasibility; text: string }[] };
+
+/** Элемент здания, чьё состояние может сдвинуть бюджет; reserve — % капвложений. */
+export type TechRisk = { element: string; note: string; reserve: NumRange };
 
 export type EngineOutput = {
   summary: string;
@@ -92,13 +125,17 @@ export type EngineOutput = {
   methodology: string;
   accuracy_level: AccuracyLevel;
   warnings: string[];
+  tech_risks?: TechRisk[];
+  next_steps?: string[];
 };
+
+export type ReportShare = { token: string; shared_at: string };
 
 export type ReportStatus = 'queued' | 'running' | 'ready' | 'failed';
 
 export type Report = {
   id: string;
-  kind: 'demo' | 'user';
+  kind: 'demo' | 'user' | 'shared';
   status: ReportStatus;
   accuracy_level: AccuracyLevel;
   engine_version: string;
@@ -107,6 +144,9 @@ export type Report = {
   refined: boolean;
   building: BuildingCard;
   result: EngineOutput | null;
+  /** Открытая ссылка на отчёт; приходит только владельцу. */
+  share?: ReportShare;
+  can_share?: boolean;
 };
 
 export type DemoBuilding = { id: number; address: string; name: string | null; center: [number, number] };

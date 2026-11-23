@@ -59,3 +59,14 @@ UPDATE jobs SET done_at = now(), last_error = NULL WHERE id = $1;
 
 -- name: RetryJob :exec
 UPDATE jobs SET locked_at = NULL, last_error = $2, run_at = now() + interval '10 seconds' WHERE id = $1;
+
+-- name: ShareReport :one
+UPDATE reports SET share_token = coalesce(share_token, @token), shared_at = coalesce(shared_at, now())
+WHERE id = @id
+RETURNING share_token::text AS share_token, shared_at::timestamptz AS shared_at;
+
+-- name: UnshareReport :exec
+UPDATE reports SET share_token = NULL, shared_at = NULL WHERE id = $1;
+
+-- name: GetReportByShareToken :one
+SELECT * FROM reports WHERE share_token = $1;

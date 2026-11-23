@@ -5,6 +5,7 @@ import { Button, ButtonLink, Skeleton, SkeletonText } from '../../design/compone
 import { DocShell } from '../../design/DocShell';
 import { ImproveForDemo, ReportView } from './ReportView';
 import { usePdfDownload } from './usePdfDownload';
+import { IS_STATIC } from '../../api/static';
 
 export function DemoReportPage() {
   const id = Number(useParams().buildingId);
@@ -30,7 +31,7 @@ export function DemoReportPage() {
       ) : !data ? (
         <ReportSkeleton />
       ) : (
-        <ReportView report={data} improveAction={<ImproveForDemo />} onDownload={pdf.download} downloading={pdf.pending} />
+        <ReportView report={data} improveAction={<ImproveForDemo />} onDownload={IS_STATIC ? () => window.print() : pdf.download} downloading={pdf.pending} />
       )}
     </>
   );

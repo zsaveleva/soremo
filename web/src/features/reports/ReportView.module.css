@@ -4,6 +4,35 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+.passport { margin-top: var(--s-6); }
+.headActions { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+.assessment { margin-top: var(--s-8); }
+.assessmentHead { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--line-strong); }
+.assessmentHead h4 { font-size: var(--fs-15); font-weight: 600; }
+.checks { list-style: none; padding: 0; display: grid; }
+.checks li { display: grid; grid-template-columns: 142px minmax(0, 1fr); gap: var(--s-4); align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.5; }
+.arguments, .evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-8); margin-top: var(--s-8); }
+.arguments h4, .evidence h4 { font-size: var(--fs-15); font-weight: 500; margin-bottom: var(--s-3); }
+.positiveList, .cautionList { display: grid; gap: 10px; padding-left: 18px; font-size: 14px; }
+.positiveList li::marker { color: var(--moss); }
+.cautionList li::marker { color: var(--sand); }
+.evidence { padding: var(--s-4) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--ink-2); }
+.evidence h4 { color: var(--ink); font-size: var(--fs-13); }
+.evidence h4 span { margin-left: 8px; color: var(--ink-2); font-weight: 400; }
+.evidence ul { list-style: none; padding: 0; display: grid; gap: 8px; font-size: var(--fs-13); }
+.technicalRisks { list-style: none; padding: 0; border-top: 1px solid var(--line-strong); }
+.technicalRisks li { display: grid; grid-template-columns: minmax(0, 1fr) 140px; gap: var(--s-8); padding: var(--s-6) 0; border-bottom: 1px solid var(--line); }
+.technicalBody h3 { font-size: var(--fs-15); font-weight: 500; }
+.technicalBody p { color: var(--ink-2); font-size: 14px; margin-top: 6px; max-width: 640px; }
+.reserve { text-align: right; display: grid; align-content: start; gap: 4px; }
+.reserve strong { font-size: var(--fs-26); font-weight: 500; line-height: 1.2; white-space: nowrap; }
+.reserve strong span { font-size: var(--fs-17); margin-left: 2px; }
+.reserve > span { color: var(--ink-2); font-size: 12px; }
+.explanation { color: var(--ink-2); font-size: var(--fs-13); padding: 12px 0 12px 16px; border-left: 2px solid var(--sand); margin-top: var(--s-4); max-width: 720px; }
+.nextSteps { list-style: none; padding: 0; border-top: 1px solid var(--line-strong); }
+.nextSteps li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--s-4); padding: var(--s-4) 0; border-bottom: 1px solid var(--line); }
+.stepNumber { font-family: var(--font-display); font-size: var(--fs-13); color: var(--ink-2); padding-top: 2px; }
+
 .head {
   display: grid;
   gap: var(--s-3);
@@ -277,9 +306,14 @@
     font-size: var(--fs-20);
   }
 
-  .twoCol {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  .twoCol, .arguments, .evidence { grid-template-columns: minmax(0, 1fr); }
+  .arguments, .evidence { gap: var(--s-6); }
+  .checks li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .technicalRisks li { grid-template-columns: minmax(0, 1fr) 100px; gap: var(--s-4); }
+  .reserve strong { font-size: var(--fs-20); }
+  .headActions { width: 100%; }
+  .headActions > button { flex: 1 1 auto; }
+  .nextSteps li { grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
 
   .econ {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -287,7 +321,20 @@
 }
 
 /* Печать и PDF: тот же документ без навигации, разрывы перед сценариями. */
+@page { size: A4; margin: 14mm 16mm 16mm; }
 @media print {
+  .twoCol, .zoning, .technicalSection, .tepTable { break-inside: avoid; }
+  .report { display: block; font-size: 13px; }
+  .summary { font-size: 15px; }
+  .arguments, .evidence { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .checks li { break-inside: avoid; padding: 8px 0; font-size: 12px; }
+  .technicalRisks li, .nextSteps li, .arguments, .evidence { break-inside: avoid; }
+  .technicalRisks li { padding: 12px 0; }
+  .technicalBody p { font-size: 12px; }
+  .reserve strong { font-size: 20px; }
+  .positiveList, .cautionList { font-size: 12px; }
+  .evidence ul { font-size: 11px; }
+  .h4 { margin-top: var(--s-4); }
   /* Каждый сценарий со второго — с новой страницы; первый идёт сразу за заголовком раздела. */
   .scenario + .scenario {
     break-before: page;
@@ -308,8 +355,7 @@
 
   .head,
   .keyNums,
-  .econ,
-  table {
+  .econ {
     break-inside: avoid;
   }
 }

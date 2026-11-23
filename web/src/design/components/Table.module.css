@@ -65,6 +65,15 @@
   padding: var(--s-6) 0 !important;
 }
 
+@media print {
+  .scroll { overflow: visible; }
+  .table { table-layout: fixed; font-size: 12px; }
+  .table th { font-size: 11px; }
+  .table th, .table td { padding: 6px 8px 6px 0; overflow-wrap: anywhere; }
+  .table [data-numeric] { white-space: normal; }
+  .table tr { break-inside: avoid; }
+}
+
 @media (max-width: 720px) {
   .table[data-dense] {
     min-width: 720px;

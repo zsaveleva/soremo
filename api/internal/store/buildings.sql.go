@@ -15,20 +15,27 @@ import (
 const documentStatsForBuilding = `-- name: DocumentStatsForBuilding :one
 SELECT count(*) FILTER (WHERE status = 'pending')::int AS pending,
        count(*) FILTER (WHERE status = 'accepted')::int AS accepted,
-       coalesce(array_agg(DISTINCT kind) FILTER (WHERE status = 'accepted'), '{}')::text[] AS accepted_kinds
+       coalesce(array_agg(DISTINCT kind) FILTER (WHERE status = 'accepted'), '{}')::text[] AS accepted_kinds,
+       max(issued_on) FILTER (WHERE status = 'accepted')::date AS latest_accepted_on
 FROM documents WHERE building_id = $1
 `
 
 type DocumentStatsForBuildingRow struct {
-	Pending       int32
-	Accepted      int32
-	AcceptedKinds []string
+	Pending          int32
+	Accepted         int32
+	AcceptedKinds    []string
+	LatestAcceptedOn pgtype.Date
 }
 
 func (q *Queries) DocumentStatsForBuilding(ctx context.Context, buildingID int64) (DocumentStatsForBuildingRow, error) {
 	row := q.db.QueryRow(ctx, documentStatsForBuilding, buildingID)
 	var i DocumentStatsForBuildingRow
-	err := row.Scan(&i.Pending, &i.Accepted, &i.AcceptedKinds)
+	err := row.Scan(
+		&i.Pending,
+		&i.Accepted,
+		&i.AcceptedKinds,
+		&i.LatestAcceptedOn,
+	)
 	return i, err
 }
 
@@ -49,11 +56,12 @@ const getBuilding = `-- name: GetBuilding :one
 SELECT b.id, b.city_id, b.address, b.name, b.year_built, b.original_function, b.floors,
        b.area_total_m2::float8 AS area_total_m2, b.area_site_m2::float8 AS area_site_m2,
        b.area_footprint_m2::float8 AS area_footprint_m2, b.vri, b.pzz_zone, b.is_okn,
-       b.legal_status, b.source, b.status, b.is_demo, b.created_by,
+       b.legal_status, b.source, b.status, b.is_demo, b.created_by, b.created_at,
+       b.year_source, b.zones, b.zones_source, b.zones_checked_on, b.zones_demo,
        ST_AsGeoJSON(b.geom, 6)::text AS geometry,
        ST_X(b.centroid)::float8 AS lon, ST_Y(b.centroid)::float8 AS lat,
        c.metro_name, c.metro_dist_m, c.transit_index, c.social_500m,
-       c.commercial_density, c.business_activity
+       c.commercial_density, c.business_activity, c.updated_at AS context_updated_at
 FROM buildings b
 JOIN context_metrics c ON c.building_id = b.id
 WHERE b.id = $1
@@ -78,6 +86,12 @@ type GetBuildingRow struct {
 	Status            string
 	IsDemo            bool
 	CreatedBy         uuid.NullUUID
+	CreatedAt         pgtype.Timestamptz
+	YearSource        string
+	Zones             []byte
+	ZonesSource       pgtype.Text
+	ZonesCheckedOn    pgtype.Date
+	ZonesDemo         bool
 	Geometry          string
 	Lon               float64
 	Lat               float64
@@ -87,6 +101,7 @@ type GetBuildingRow struct {
 	Social500m        int32
 	CommercialDensity int32
 	BusinessActivity  int32
+	ContextUpdatedAt  pgtype.Timestamptz
 }
 
 func (q *Queries) GetBuilding(ctx context.Context, id int64) (GetBuildingRow, error) {
@@ -111,6 +126,12 @@ func (q *Queries) GetBuilding(ctx context.Context, id int64) (GetBuildingRow, er
 		&i.Status,
 		&i.IsDemo,
 		&i.CreatedBy,
+		&i.CreatedAt,
+		&i.YearSource,
+		&i.Zones,
+		&i.ZonesSource,
+		&i.ZonesCheckedOn,
+		&i.ZonesDemo,
 		&i.Geometry,
 		&i.Lon,
 		&i.Lat,
@@ -120,6 +141,7 @@ func (q *Queries) GetBuilding(ctx context.Context, id int64) (GetBuildingRow, er
 		&i.Social500m,
 		&i.CommercialDensity,
 		&i.BusinessActivity,
+		&i.ContextUpdatedAt,
 	)
 	return i, err
 }
@@ -492,6 +514,34 @@ func (q *Queries) SearchBuildings(ctx context.Context, arg SearchBuildingsParams
 		return nil, err
 	}
 	return items, nil
+}
+
+const setBuildingPassport = `-- name: SetBuildingPassport :exec
+UPDATE buildings
+SET year_source = $1, zones = $2, zones_source = $3,
+    zones_checked_on = $4, zones_demo = $5
+WHERE id = $6
+`
+
+type SetBuildingPassportParams struct {
+	YearSource     string
+	Zones          []byte
+	ZonesSource    pgtype.Text
+	ZonesCheckedOn pgtype.Date
+	ZonesDemo      bool
+	ID             int64
+}
+
+func (q *Queries) SetBuildingPassport(ctx context.Context, arg SetBuildingPassportParams) error {
+	_, err := q.db.Exec(ctx, setBuildingPassport,
+		arg.YearSource,
+		arg.Zones,
+		arg.ZonesSource,
+		arg.ZonesCheckedOn,
+		arg.ZonesDemo,
+		arg.ID,
+	)
+	return err
 }
 
 const setDemoSlug = `-- name: SetDemoSlug :exec

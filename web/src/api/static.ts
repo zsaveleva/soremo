@@ -1,3 +1,4 @@
+import { annotateStatic } from './staticAnalysis';
 // Статическая демо-версия (GitHub Pages): ответы API строятся в браузере из
 // данных public/data, подготовленных scripts/build-static-data.mjs. Логика
 // повторяет бэкенд — фильтры, bbox, кластеры по сетке, поиск по словам.
@@ -355,7 +356,7 @@ export async function staticApi(path: string, method: string, json?: unknown): P
     if (m) {
       const r = (await reports())[m[1]!];
       if (!r) throw new ApiError(404, 'not_found', 'Для этого объекта нет примера отчёта.');
-      return r;
+      return { ...r, result: r.result ? annotateStatic(r.building, r.result) : null };
     }
     m = p.match(/^\/buildings\/(\d+)$/);
     if (m) {
